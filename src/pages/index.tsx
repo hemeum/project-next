@@ -1,14 +1,15 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
+
+import Wrap from "src/components/contain/Wrap";
 
 const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Next project</title>
+        <title>로스트아크</title>
       </Head>
-      <h1>시작합니다</h1>
+      <Wrap></Wrap>
     </div>
   );
 };
