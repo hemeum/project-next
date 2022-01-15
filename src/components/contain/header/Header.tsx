@@ -6,6 +6,8 @@ function Header() {
   const [gameBt, setGameBt] = useState(false);
   const [size, setSize] = useState(0);
 
+  console.log("header");
+
   const handleResize = () => {
     setSize(window.innerWidth);
   };
@@ -119,7 +121,7 @@ function Header() {
           <Logo size={size}>
             <h1>
               <a>
-                {size < 1400 ? (
+                {size < 1900 ? (
                   <img src="/img/logo-loa.png" alt="로스트아크 로고"></img>
                 ) : (
                   <img src="/img/logo-loa2.png" alt="로스트아크 로고"></img>
@@ -217,7 +219,7 @@ function Header() {
           </Nav>
         </InnerL>
         <InnerR>
-          <p>LOGIN</p>
+          <button type="button">LOGIN</button>
           {gameBt ? (
             <img
               src="/img/header-gamestart-bt-hover.png"
@@ -243,12 +245,15 @@ function Header() {
 }
 
 const HeaderC = styled.header<{ ref: any }>`
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 80px;
+  z-index: 9999;
 `;
 
 const HeaderBottomLine = styled.div`
@@ -277,7 +282,7 @@ const Logo = styled.div<{ size: number }>`
     height: 50px;
     img {
       ${({ size }) => {
-        return size < 1400
+        return size < 1900
           ? "width:50px; margin-left:30px;"
           : "width:160px; margin-left: 80px; margin-right: 30px";
       }};
@@ -294,7 +299,6 @@ const Nav = styled.nav`
 
 const Menus = styled.ul`
   width: 100%;
-  position: relative;
   display: flex;
   align-items: center;
 `;
@@ -309,6 +313,7 @@ const MenuList = styled.li`
   > a {
     display: inline-block;
     height: 80px;
+    font-weight: bold;
     line-height: 80px;
   }
   :hover {
@@ -342,10 +347,14 @@ const InnerR = styled.div`
   right: 0;
   display: flex;
   align-items: center;
-  p {
+  button {
     font-size: 16px;
     color: #fff;
     margin-right: 20px;
+    border: 0;
+    outline: 0;
+    background-color: transparent;
+    cursor: pointer;
   }
 `;
 
