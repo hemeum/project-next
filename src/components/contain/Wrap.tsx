@@ -1,16 +1,20 @@
 import Header from "src/components/contain/header/Header";
+import Main from "src/components/contain/main/Main";
 
 import styled from "styled-components";
 
 function Wrap() {
+  console.log("wrap");
   return (
     <WrapBg>
       <Header></Header>
+      <Main></Main>
     </WrapBg>
   );
 }
 
 const WrapBg = styled.div`
+  position: relative;
   min-width: 1200px;
   height: 1000px;
   background-image: url("/img/main-bg.jpg");
