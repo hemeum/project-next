@@ -6,8 +6,6 @@ function Header() {
   const [gameBt, setGameBt] = useState(false);
   const [size, setSize] = useState(0);
 
-  console.log("header");
-
   const handleResize = () => {
     setSize(window.innerWidth);
   };

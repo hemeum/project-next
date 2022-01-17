@@ -4,7 +4,6 @@ import Main from "src/components/contain/main/Main";
 import styled from "styled-components";
 
 function Wrap() {
-  console.log("wrap");
   return (
     <WrapBg>
       <Header></Header>
