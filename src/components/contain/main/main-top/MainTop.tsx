@@ -5,6 +5,8 @@ import styled from "styled-components";
 function MainTop() {
   const leftRef = useRef<HTMLDivElement>(null);
 
+  const boxRef = useRef<HTMLUListElement>(null);
+
   const imgRef1 = useRef<HTMLImageElement>(null);
   const imgRef2 = useRef<HTMLImageElement>(null);
   const imgRef3 = useRef<HTMLImageElement>(null);
@@ -26,16 +28,18 @@ function MainTop() {
 
   const [sels, setSels] = useState([true, false, false, false, false, false]); // 배열 요소에 따라 배너글자 색깔 바뀜
 
-  useEffect(() => {
-    let imgTopIndex;
+  const [translate, setTranslate] = useState(0);
 
-    setTimeout(() => {
+  useEffect(() => {
+    const fade = setTimeout(() => {
       // fade out 효과 함수
+
       const index = sels.indexOf(true);
       imgRefArr.forEach((c) => {
         if (c.current !== null) {
-          console.log(sels);
           if (c.current === imgRefArr[index].current) {
+            // 현재 zindex의 배너이미지 오파시티 0으로 변경해주면서 fade 효과
+
             c.current.style.opacity = "0";
           } else {
             c.current.style.opacity = "1";
@@ -45,6 +49,13 @@ function MainTop() {
     }, 4800);
 
     const bannerSlide = setInterval(() => {
+      for (let i = 0; i < imgRefArr.length; i++) {
+        // opacity 0으로 된거 다시 1로 싹 변경
+        if (imgRefArr[i].current !== null) {
+          imgRefArr[i].current.style.opacity = "1";
+        }
+      }
+      let imgTopIndex;
       const newZIndexs = zIndexs.map((item) => {
         // 겹쳐놓은 이미지 zindex 변경
         if (item === 6) {
@@ -54,9 +65,7 @@ function MainTop() {
         }
         return item;
       });
-
       imgTopIndex = newZIndexs.indexOf(6);
-
       setZIndexs(newZIndexs);
 
       const newSels = [false, false, false, false, false, false]; // 배너글자 색 변경
@@ -67,15 +76,192 @@ function MainTop() {
       } else {
         imgTopIndex++;
       }
-    }, 5000);
 
-    if (sels.indexOf(true) === 2) {
-    }
+      if (boxRef.current !== null) {
+        // 3번째 사진부터 이동
+        if (
+          zIndexs[0] === 6 ||
+          zIndexs[1] === 6 ||
+          zIndexs[zIndexs.length - 2] === 6
+        ) {
+          // 트랜스레이트 이동X
+          return;
+        } else if (zIndexs[zIndexs.length - 1] === 6) {
+          // 트랜스레이트 0으로 초기화
+          boxRef.current.style.transform = `translateX(0px)`;
+          setTranslate(0);
+        } else {
+          // 트랜스레이트 이동O
+          boxRef.current.style.transform = `translateX(${-180 + translate}px)`;
+          setTranslate(translate - 180);
+        }
+      }
+    }, 5000);
 
     return () => {
       clearInterval(bannerSlide);
+      clearTimeout(fade);
     };
-  }, [zIndexs, sels]);
+  }, [zIndexs, sels, translate]);
+
+  const handleBanner = (e: { currentTarget: any }) => {
+    const banners = e.currentTarget.parentNode.childNodes;
+    const selectIndex = [...banners].indexOf(e.currentTarget); // childNodes에 배열 메소드 사용할 땐 새 배열로 복제 해줘야함. 바로 사용 불가능.
+
+    const newZIndexs = [...zIndexs];
+    if (selectIndex === 0) {
+      // 배너이미지 zIndex 변경
+      newZIndexs.splice(selectIndex, 6, 6, 5, 4, 3, 2, 1);
+      setZIndexs(newZIndexs);
+    } else if (selectIndex === 1) {
+      newZIndexs.splice(selectIndex, 5, 6, 5, 4, 3, 2);
+      newZIndexs.splice(0, 1, 1);
+      setZIndexs(newZIndexs);
+    } else if (selectIndex === 2) {
+      newZIndexs.splice(selectIndex, 4, 6, 5, 4, 3);
+      newZIndexs.splice(0, 2, 2, 1);
+      setZIndexs(newZIndexs);
+    } else if (selectIndex === 3) {
+      newZIndexs.splice(selectIndex, 3, 6, 5, 4);
+      newZIndexs.splice(0, 3, 3, 2, 1);
+      setZIndexs(newZIndexs);
+    } else if (selectIndex === 4) {
+      newZIndexs.splice(selectIndex, 4, 6, 5);
+      newZIndexs.splice(0, 4, 4, 3, 2, 1);
+      setZIndexs(newZIndexs);
+    } else if (selectIndex === 5) {
+      newZIndexs.splice(selectIndex, 5, 6);
+      newZIndexs.splice(0, 5, 5, 4, 3, 2, 1);
+      setZIndexs(newZIndexs);
+    }
+
+    const newSels = [false, false, false, false, false, false]; // 배너글자 색 변경
+    newSels.splice(selectIndex, 1, true);
+    setSels(newSels);
+
+    if (boxRef.current !== null) {
+      // 배너글자 클릭 시 트랜스레이트 이동 반경
+      if (translate === 0) {
+        if (selectIndex === 3) {
+          boxRef.current.style.transform = `translateX(${-180}px)`;
+          setTranslate(-180);
+        }
+      } else if (translate === -180) {
+        if (selectIndex === 1 || selectIndex === 2) {
+          boxRef.current.style.transform = `translateX(${180 + translate}px)`;
+          setTranslate(translate + 180);
+        } else if (selectIndex === 4) {
+          boxRef.current.style.transform = `translateX(${-180 + translate}px)`;
+          setTranslate(translate - 180);
+        }
+      } else if (translate === -360) {
+        if (selectIndex === 3) {
+          boxRef.current.style.transform = `translateX(${180 + translate}px)`;
+          setTranslate(translate + 180);
+        } else if (selectIndex === 2) {
+          boxRef.current.style.transform = `translateX(${360 + translate}px)`;
+          setTranslate(translate + 360);
+        }
+      }
+    }
+  };
+
+  const handleBannerRArrow = () => {
+    const newZIndexs = zIndexs.map((item) => {
+      // 겹쳐놓은 이미지 zindex 변경
+      if (item === 6) {
+        item = 1;
+      } else {
+        item = item + 1;
+      }
+      return item;
+    });
+    setZIndexs(newZIndexs);
+
+    let imgTopIndex;
+    imgTopIndex = newZIndexs.indexOf(6);
+    const newSels = [false, false, false, false, false, false];
+    newSels.splice(imgTopIndex, 1, true); // 배너글자 색 변경
+    setSels(newSels);
+
+    if (boxRef.current !== null) {
+      // 배너글자 클릭 시 트랜스레이트 이동 반경
+      if (translate === 0) {
+        if (imgTopIndex === 3) {
+          boxRef.current.style.transform = `translateX(${-180}px)`;
+          setTranslate(-180);
+        }
+      } else if (translate === -180) {
+        if (imgTopIndex === 1 || imgTopIndex === 2) {
+          boxRef.current.style.transform = `translateX(${180 + translate}px)`;
+          setTranslate(translate + 180);
+        } else if (imgTopIndex === 4) {
+          boxRef.current.style.transform = `translateX(${-180 + translate}px)`;
+          setTranslate(translate - 180);
+        }
+      } else if (translate === -360) {
+        if (imgTopIndex === 3) {
+          boxRef.current.style.transform = `translateX(${180 + translate}px)`;
+          setTranslate(translate + 180);
+        } else if (imgTopIndex === 2) {
+          boxRef.current.style.transform = `translateX(${360 + translate}px)`;
+          setTranslate(translate + 360);
+        } else if (imgTopIndex === 0) {
+          boxRef.current.style.transform = `translateX(${0}px)`;
+          setTranslate(0);
+        }
+      }
+    }
+  };
+
+  const handleBannerLArrow = () => {
+    const newZIndexs = zIndexs.map((item) => {
+      // 겹쳐놓은 이미지 zindex 변경
+      if (item === 1) {
+        item = 6;
+      } else {
+        item = item - 1;
+      }
+      return item;
+    });
+    setZIndexs(newZIndexs);
+
+    let imgTopIndex; // 화살표 버튼 클릭 시 예상되는 index (현재 인덱스 X)
+    imgTopIndex = newZIndexs.indexOf(6);
+    const newSels = [false, false, false, false, false, false];
+    newSels.splice(imgTopIndex, 1, true); // 배너글자 색 변경
+    setSels(newSels);
+
+    if (boxRef.current !== null) {
+      // 배너글자 클릭 시 트랜스레이트 이동 반경
+      if (translate === 0) {
+        if (imgTopIndex === 3) {
+          boxRef.current.style.transform = `translateX(${-180}px)`;
+          setTranslate(-180);
+        } else if (imgTopIndex === 5) {
+          // 1번째 배너에서 < 클릭 시 맨 뒤 배너로 가기
+          boxRef.current.style.transform = `translateX(${-360}px)`;
+          setTranslate(-360);
+        }
+      } else if (translate === -180) {
+        if (imgTopIndex === 1 || imgTopIndex === 2) {
+          boxRef.current.style.transform = `translateX(${180 + translate}px)`;
+          setTranslate(translate + 180);
+        } else if (imgTopIndex === 4) {
+          boxRef.current.style.transform = `translateX(${-180 + translate}px)`;
+          setTranslate(translate - 180);
+        }
+      } else if (translate === -360) {
+        if (imgTopIndex === 3) {
+          boxRef.current.style.transform = `translateX(${180 + translate}px)`;
+          setTranslate(translate + 180);
+        } else if (imgTopIndex === 2) {
+          boxRef.current.style.transform = `translateX(${360 + translate}px)`;
+          setTranslate(translate + 360);
+        }
+      }
+    }
+  };
 
   return (
     <Top>
@@ -91,16 +277,33 @@ function MainTop() {
         </Imgs>
         <BannerList>
           <div>
-            <i className="fas fa-chevron-left"></i>
-            <ul>
-              <BannerItem sel={sels[0]}>banner1</BannerItem>
-              <BannerItem sel={sels[1]}>banner2</BannerItem>
-              <BannerItem sel={sels[2]}>banner3</BannerItem>
-              <BannerItem sel={sels[3]}>banner4</BannerItem>
-              <BannerItem sel={sels[4]}>banner5</BannerItem>
-              <BannerItem sel={sels[5]}>banner6</BannerItem>
-            </ul>
-            <i className="fas fa-chevron-right"></i>
+            <i className="fas fa-chevron-left" onClick={handleBannerLArrow}></i>
+            <div>
+              <BannerItembox ref={boxRef}>
+                <BannerItem sel={sels[0]} onClick={handleBanner}>
+                  banner1
+                </BannerItem>
+                <BannerItem sel={sels[1]} onClick={handleBanner}>
+                  banner2
+                </BannerItem>
+                <BannerItem sel={sels[2]} onClick={handleBanner}>
+                  banner3
+                </BannerItem>
+                <BannerItem sel={sels[3]} onClick={handleBanner}>
+                  banner4
+                </BannerItem>
+                <BannerItem sel={sels[4]} onClick={handleBanner}>
+                  banner5
+                </BannerItem>
+                <BannerItem sel={sels[5]} onClick={handleBanner}>
+                  banner6
+                </BannerItem>
+              </BannerItembox>
+            </div>
+            <i
+              className="fas fa-chevron-right"
+              onClick={handleBannerRArrow}
+            ></i>
             <p>
               <span>{[...zIndexs].reverse()[0]}</span> / 6
             </p>
@@ -150,6 +353,9 @@ const Left = styled.div<{ ref: any }>`
     top: 0;
     left: 0;
     z-index: 200;
+  }
+  i {
+    cursor: pointer;
   }
 `;
 
@@ -203,7 +409,7 @@ const BannerList = styled.div`
   background-color: black;
   opacity: 0.7;
   z-index: 100;
-  div {
+  > div {
     display: flex;
     align-items: center;
     height: 50px;
@@ -213,16 +419,22 @@ const BannerList = styled.div`
     i {
       margin: 0 30px;
     }
-    ul {
-      display: flex;
+    div {
       width: 650px;
       border: 1px solid #fff;
       overflow: hidden;
     }
+
     span {
       color: #fff;
     }
   }
+`;
+
+const BannerItembox = styled.ul<{ ref: any }>`
+  display: flex;
+  width: 1010px;
+  transition: transform 500ms ease;
 `;
 
 const BannerItem = styled.li<{ sel: boolean }>`
