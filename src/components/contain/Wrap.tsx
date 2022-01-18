@@ -14,7 +14,7 @@ function Wrap() {
 
 const WrapBg = styled.div`
   position: relative;
-  min-width: 1200px;
+  min-width: 1300px;
   height: 1000px;
   background-image: url("/img/main-bg.jpg");
   background-size: cover;

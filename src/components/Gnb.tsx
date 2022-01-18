@@ -29,7 +29,7 @@ function Gnb() {
 
 const Wrap = styled.div`
   width: 100%;
-  min-width: 1400px;
+  min-width: 1300px;
   height: 100%;
   display: flex;
   justify-content: space-between;
