@@ -1,21 +1,12 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
+import { debounce, throttle } from "lodash";
 
 function Header() {
   const [gameBt, setGameBt] = useState(false);
   const [size, setSize] = useState(0);
-
-  const handleResize = () => {
-    setSize(window.innerWidth);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const [scroll, setScroll] = useState(0);
 
   const itemsRef1 = useRef<HTMLUListElement>(null);
   const itemsRef2 = useRef<HTMLUListElement>(null);
@@ -24,6 +15,44 @@ function Header() {
   const itemsRef5 = useRef<HTMLUListElement>(null);
   const itemsRef6 = useRef<HTMLUListElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = throttle(() => {
+    console.log("scroll", scroll);
+    setScroll(window.scrollY);
+  }, 100);
+
+  const handleResize = debounce(() => {
+    console.log("resize", size);
+    setSize(window.innerWidth);
+  }, 300);
+
+  useEffect(() => {
+    // 빈배열에 size값 넣어도 되고, 안넣어도 됌. 넣지않으면 첫 실행되었을 때 값을 계속 유지함
+    setSize(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    // throttle은 debounce와 달리 이벤트가 바로 실행되었다가 몇초 간격으로 다시 실행해주는 것이기 때문에, 빈배열에 scroll을 넣어주게 되면, 연속적으로 계속 실행하는 것과 같다. 따라서 비워주자.
+    setScroll(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  if (headerRef.current !== null) {
+    // css 우선순위에 의해서 styled-compo로 적용하는 스타일과 ref로 적용하는 스타일이 겹친다면 ref는 인라인 스타일로 class로 작성한 스타일보다 우선순위가 높다. 그러니 하나의 스타일을 바꿀 경우엔 통일한 방식으로 변경해주자.
+    if (scroll > 0) {
+      headerRef.current.style.backgroundColor = "black";
+    } else if (scroll === 0) {
+      headerRef.current.style.backgroundColor = "transparent";
+    }
+  }
 
   const itemRefArr = [
     itemsRef1,
@@ -114,7 +143,7 @@ function Header() {
 
   return (
     <>
-      <HeaderC ref={headerRef}>
+      <HeaderC ref={headerRef} scroll={scroll}>
         <InnerL>
           <Logo size={size}>
             <h1>
@@ -175,7 +204,12 @@ function Header() {
               }}
               onMouseLeave={() => {
                 if (headerRef.current !== null) {
-                  headerRef.current.style.backgroundColor = "transparent";
+                  if (scroll === 0) {
+                    headerRef.current.style.backgroundColor = "transparent";
+                  } else {
+                    headerRef.current.style.backgroundColor = "black";
+                  }
+
                   headerRef.current.style.height = "80px";
                   headerRef.current.style.transition =
                     "height 0.2s ease-in, background-color 0.2s ease-in";
@@ -242,8 +276,10 @@ function Header() {
   );
 }
 
-const HeaderC = styled.header<{ ref: any }>`
-  position: absolute;
+const HeaderC = styled.header<{ ref: any; scroll: number }>`
+  position: ${({ scroll }) => {
+    return scroll > 0 ? "fixed" : "absolute";
+  }};
   top: 0;
   left: 0;
   display: flex;
@@ -252,6 +288,12 @@ const HeaderC = styled.header<{ ref: any }>`
   width: 100%;
   height: 80px;
   z-index: 9999;
+  transition: background-color 100ms ease-in-out;
+  ${({ scroll }) => {
+    return scroll > 0
+      ? "background-color:black"
+      : "background-color:transparent";
+  }};
 `;
 
 const HeaderBottomLine = styled.div`
