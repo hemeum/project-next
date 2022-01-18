@@ -279,22 +279,22 @@ function LeftBanners() {
           <div>
             <BannerItembox ref={boxRef}>
               <BannerItem sel={sels[0]} onClick={handleBanner}>
-                banner1
+                하이퍼 익스프레스 이벤트
               </BannerItem>
               <BannerItem sel={sels[1]} onClick={handleBanner}>
-                banner2
+                도화가 사전등록 이벤트
               </BannerItem>
               <BannerItem sel={sels[2]} onClick={handleBanner}>
-                banner3
+                아크라시아 행복기원 이벤트
               </BannerItem>
               <BannerItem sel={sels[3]} onClick={handleBanner}>
-                banner4
+                프레이야 포인트 SHOP
               </BannerItem>
               <BannerItem sel={sels[4]} onClick={handleBanner}>
-                banner5
+                헬로 2022 출석 이벤트
               </BannerItem>
               <BannerItem sel={sels[5]} onClick={handleBanner}>
-                banner6
+                프레이야 아일랜드
               </BannerItem>
             </BannerItembox>
           </div>
@@ -373,22 +373,23 @@ const BannerList = styled.div`
   left: 0;
   width: 100%;
   height: 50px;
-  background-color: black;
-  opacity: 0.7;
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: 100;
   > div {
     display: flex;
     align-items: center;
     height: 50px;
-    color: #fff;
     font-size: 18px;
-    color: lightgray;
+    color: gray;
     i {
-      margin: 0 30px;
+      margin: 0 20px;
+      transition: color 0.5s;
+      :hover {
+        color: #fff;
+      }
     }
     div {
-      width: 650px;
-      border: 1px solid #fff;
+      width: 730px;
       overflow: hidden;
     }
 
@@ -400,21 +401,20 @@ const BannerList = styled.div`
 
 const BannerItembox = styled.ul<{ ref: any }>`
   display: flex;
-  width: 1010px;
+  width: 1140px;
   transition: transform 500ms ease;
 `;
 
 const BannerItem = styled.li<{ sel: boolean }>`
   flex: none;
-  width: 110px;
-  margin-right: 70px;
+  width: 170px;
+  margin-right: 17px;
+  font-size: 13px;
   text-align: center;
   cursor: pointer;
-  :last-child {
-    margin-right: 0;
-  }
+
   ${({ sel }) => {
-    return sel ? "color:red" : "color:#fff";
+    return sel ? "color:#fff;" : "color:gray";
   }}
 `;
 
