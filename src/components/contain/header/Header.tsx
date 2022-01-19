@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { debounce, throttle } from "lodash";
+import { debounce } from "lodash";
 
-function Header() {
+function Header({ scroll }: { scroll: number }) {
   const [gameBt, setGameBt] = useState(false);
   const [size, setSize] = useState(0);
-  const [scroll, setScroll] = useState(0);
 
   const itemsRef1 = useRef<HTMLUListElement>(null);
   const itemsRef2 = useRef<HTMLUListElement>(null);
@@ -14,17 +13,34 @@ function Header() {
   const itemsRef4 = useRef<HTMLUListElement>(null);
   const itemsRef5 = useRef<HTMLUListElement>(null);
   const itemsRef6 = useRef<HTMLUListElement>(null);
+
+  const menuRef1 = useRef<HTMLLIElement>(null);
+  const menuRef2 = useRef<HTMLLIElement>(null);
+  const menuRef3 = useRef<HTMLLIElement>(null);
+  const menuRef4 = useRef<HTMLLIElement>(null);
+  const menuRef5 = useRef<HTMLLIElement>(null);
+  const menuRef6 = useRef<HTMLLIElement>(null);
+
   const headerRef = useRef<HTMLDivElement>(null);
+  const pracRef = useRef<HTMLDivElement>(null);
 
-  const handleScroll = throttle(() => {
-    console.log("scroll", scroll);
-    setScroll(window.scrollY);
-  }, 100);
+  const itemRefArr = [
+    itemsRef1,
+    itemsRef2,
+    itemsRef3,
+    itemsRef4,
+    itemsRef5,
+    itemsRef6,
+  ];
 
-  const handleResize = debounce(() => {
-    console.log("resize", size);
-    setSize(window.innerWidth);
-  }, 300);
+  const menuRefArr: any[] = [
+    menuRef1,
+    menuRef2,
+    menuRef3,
+    menuRef4,
+    menuRef5,
+    menuRef6,
+  ];
 
   useEffect(() => {
     // 빈배열에 size값 넣어도 되고, 안넣어도 됌. 넣지않으면 첫 실행되었을 때 값을 계속 유지함
@@ -36,14 +52,55 @@ function Header() {
     };
   }, []);
 
-  useEffect(() => {
-    // throttle은 debounce와 달리 이벤트가 바로 실행되었다가 몇초 간격으로 다시 실행해주는 것이기 때문에, 빈배열에 scroll을 넣어주게 되면, 연속적으로 계속 실행하는 것과 같다. 따라서 비워주자.
-    setScroll(window.scrollY);
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const handleResize = debounce(() => {
+    console.log("resize", size);
+    setSize(window.innerWidth);
+  }, 300);
+
+  const handleHover = () => {
+    if (pracRef.current !== null) {
+      pracRef.current.style.height = "250px";
+      pracRef.current.style.opacity = "1";
+      pracRef.current.style.visibility = "visible";
+      pracRef.current.style.transition =
+        "height 0.5s ease, opacity 0.2s ease, visibility 0.2s ease";
+    }
+
+    if (headerRef.current !== null) {
+      headerRef.current.style.backgroundColor = "black";
+      headerRef.current.style.transition = "background-color 0.2s ease";
+    }
+  };
+
+  const handleLeave = () => {
+    if (pracRef.current !== null) {
+      pracRef.current.style.height = "0px";
+      pracRef.current.style.opacity = "0";
+      pracRef.current.style.visibility = "hidden";
+      pracRef.current.style.transition =
+        "height 0.2s ease, opacity 0.2s ease, visibility 0.2s ease";
+    }
+    if (headerRef.current !== null) {
+      if (scroll === 0) {
+        headerRef.current.style.backgroundColor = "transparent";
+      } else {
+        headerRef.current.style.backgroundColor = "black";
+      }
+      headerRef.current.style.transition = "background-color 0.3s ease";
+    }
+  };
+
+  const handleHoverBorder = (e: { currentTarget: { parentNode: any } }) => {
+    const parent = e.currentTarget.parentNode.childNodes;
+    const index = [...parent].indexOf(e.currentTarget);
+    menuRefArr[index].current.style.borderBottom = "3px solid #fff";
+  };
+
+  const handleLeaveBorder = (e: { currentTarget: { parentNode: any } }) => {
+    const parent = e.currentTarget.parentNode.childNodes;
+    const index = [...parent].indexOf(e.currentTarget);
+    menuRefArr[index].current.style.borderBottom = "none";
+  };
 
   if (headerRef.current !== null) {
     // css 우선순위에 의해서 styled-compo로 적용하는 스타일과 ref로 적용하는 스타일이 겹친다면 ref는 인라인 스타일로 class로 작성한 스타일보다 우선순위가 높다. 그러니 하나의 스타일을 바꿀 경우엔 통일한 방식으로 변경해주자.
@@ -53,15 +110,6 @@ function Header() {
       headerRef.current.style.backgroundColor = "transparent";
     }
   }
-
-  const itemRefArr = [
-    itemsRef1,
-    itemsRef2,
-    itemsRef3,
-    itemsRef4,
-    itemsRef5,
-    itemsRef6,
-  ];
 
   const menuList = [
     {
@@ -121,23 +169,37 @@ function Header() {
   ];
 
   const menus = menuList.map((m, i) => {
-    const item = m.items.map((v) => {
+    return (
+      <MenuList
+        key={m.id}
+        onMouseEnter={handleHoverBorder}
+        onMouseLeave={handleLeaveBorder}
+      >
+        <Link href="/">
+          <a ref={menuRefArr[i]}>{m.menu}</a>
+        </Link>
+      </MenuList>
+    );
+  });
+
+  const menuListItems = menuList.map((menu, i) => {
+    const items = menu.items.map((item) => {
       return (
-        <MenuListItem key={v.id}>
+        <MenuListItem key={item.id}>
           <Link href="/">
-            <a>{v.item}</a>
+            <a>{item.item}</a>
           </Link>
         </MenuListItem>
       );
     });
-
     return (
-      <MenuList key={m.id}>
-        <Link href="/">
-          <a>{m.menu}</a>
-        </Link>
-        <MenuListItemBox ref={itemRefArr[i]}>{item}</MenuListItemBox>
-      </MenuList>
+      <MenuItemBox
+        ref={itemRefArr[i]}
+        onMouseEnter={handleHoverBorder}
+        onMouseLeave={handleLeaveBorder}
+      >
+        {items}
+      </MenuItemBox>
     );
   });
 
@@ -157,98 +219,15 @@ function Header() {
             </h1>
           </Logo>
           <Nav>
-            <Menus
-              onMouseEnter={() => {
-                if (headerRef.current !== null) {
-                  headerRef.current.style.backgroundColor = "black";
-                  headerRef.current.style.height = "330px";
-                  headerRef.current.style.transition = "height 0.2s ease-in";
-                }
-
-                if (itemsRef1.current !== null) {
-                  itemsRef1.current.style.height = "250px";
-                  itemsRef1.current.style.opacity = "1";
-                  itemsRef1.current.style.visibility = "visible";
-                  itemsRef1.current.style.transition = "opacity 0.5s ease";
-                }
-                if (itemsRef2.current !== null) {
-                  itemsRef2.current.style.height = "250px";
-                  itemsRef2.current.style.opacity = "1";
-                  itemsRef2.current.style.visibility = "visible";
-                  itemsRef2.current.style.transition = "opacity 0.5s ease";
-                }
-                if (itemsRef3.current !== null) {
-                  itemsRef3.current.style.height = "250px";
-                  itemsRef3.current.style.opacity = "1";
-                  itemsRef3.current.style.visibility = "visible";
-                  itemsRef3.current.style.transition = "opacity 0.5s ease";
-                }
-                if (itemsRef4.current !== null) {
-                  itemsRef4.current.style.height = "250px";
-                  itemsRef4.current.style.opacity = "1";
-                  itemsRef4.current.style.visibility = "visible";
-                  itemsRef4.current.style.transition = "opacity 0.5s ease";
-                }
-                if (itemsRef5.current !== null) {
-                  itemsRef5.current.style.height = "250px";
-                  itemsRef5.current.style.opacity = "1";
-                  itemsRef5.current.style.visibility = "visible";
-                  itemsRef5.current.style.transition = "opacity 0.5s ease";
-                }
-                if (itemsRef6.current !== null) {
-                  itemsRef6.current.style.height = "250px";
-                  itemsRef6.current.style.opacity = "1";
-                  itemsRef6.current.style.visibility = "visible";
-                  itemsRef6.current.style.transition = "opacity 0.5s ease";
-                }
-              }}
-              onMouseLeave={() => {
-                if (headerRef.current !== null) {
-                  if (scroll === 0) {
-                    headerRef.current.style.backgroundColor = "transparent";
-                  } else {
-                    headerRef.current.style.backgroundColor = "black";
-                  }
-
-                  headerRef.current.style.height = "80px";
-                  headerRef.current.style.transition =
-                    "height 0.2s ease-in, background-color 0.2s ease-in";
-                }
-                if (itemsRef1.current !== null) {
-                  itemsRef1.current.style.height = "0px";
-                  itemsRef1.current.style.opacity = "0";
-                  itemsRef1.current.style.visibility = "hidden";
-                }
-                if (itemsRef2.current !== null) {
-                  itemsRef2.current.style.height = "0px";
-                  itemsRef2.current.style.opacity = "0";
-                  itemsRef2.current.style.visibility = "hidden";
-                }
-                if (itemsRef3.current !== null) {
-                  itemsRef3.current.style.height = "0px";
-                  itemsRef3.current.style.opacity = "0";
-                  itemsRef3.current.style.visibility = "hidden";
-                }
-                if (itemsRef4.current !== null) {
-                  itemsRef4.current.style.height = "0px";
-                  itemsRef4.current.style.opacity = "0";
-                  itemsRef4.current.style.visibility = "hidden";
-                }
-                if (itemsRef5.current !== null) {
-                  itemsRef5.current.style.height = "0px";
-                  itemsRef5.current.style.opacity = "0";
-                  itemsRef5.current.style.visibility = "hidden";
-                }
-                if (itemsRef6.current !== null) {
-                  itemsRef6.current.style.height = "0px";
-                  itemsRef6.current.style.opacity = "0";
-                  itemsRef6.current.style.visibility = "hidden";
-                }
-              }}
-            >
+            <Menus onMouseEnter={handleHover} onMouseLeave={handleLeave}>
               {menus}
             </Menus>
           </Nav>
+          <Prac ref={pracRef} size={size}>
+            <ul onMouseEnter={handleHover} onMouseLeave={handleLeave}>
+              {menuListItems}
+            </ul>
+          </Prac>
         </InnerL>
         <InnerR>
           <button type="button">LOGIN</button>
@@ -276,10 +255,29 @@ function Header() {
   );
 }
 
+const Prac = styled.div<{ ref: any; size: number }>`
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  height: 0px;
+  background-color: black;
+  opacity: 0;
+  visibility: hidden;
+  ul {
+    width: 50%;
+    height: 100%;
+    margin-left: ${({ size }) => {
+      return size < 1900 ? "80px" : "270px";
+    }};
+    color: #fff;
+    display: flex;
+    justify-content: space-around;
+  }
+`;
+
 const HeaderC = styled.header<{ ref: any; scroll: number }>`
-  position: ${({ scroll }) => {
-    return scroll > 0 ? "fixed" : "absolute";
-  }};
+  position: sticky;
   top: 0;
   left: 0;
   display: flex;
@@ -288,7 +286,7 @@ const HeaderC = styled.header<{ ref: any; scroll: number }>`
   width: 100%;
   height: 80px;
   z-index: 9999;
-  transition: background-color 100ms ease-in-out;
+  transition: backgorund-color 0.2 ease;
   ${({ scroll }) => {
     return scroll > 0
       ? "background-color:black"
@@ -363,17 +361,16 @@ const MenuList = styled.li`
   }
 `;
 
-const MenuListItemBox = styled.ul<{ ref: any }>`
-  width: 100%;
-  height: 0px;
-  padding-top: 15px;
-  opacity: 0;
-  visibility: hidden;
+const MenuItemBox = styled.li<{ ref: any }>`
+  width: 16.667%;
+  text-align: center;
+  padding-top: 20px;
 `;
 
-const MenuListItem = styled.li`
+const MenuListItem = styled.div`
   height: 40px;
-  font-size: 13px;
+  line-height: 40px;
+  font-size: 14px;
   color: gray;
   a:hover {
     color: #fff;
