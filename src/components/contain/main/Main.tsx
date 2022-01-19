@@ -2,14 +2,14 @@ import MainTop from "src/components/contain/main/main-top/MainTop";
 
 import styled from "styled-components";
 
-function Main() {
+function Main({ scroll }: { scroll: number }) {
   // main-top-box에게 높이주고, 그 안에 MainTop은 박스 안에서 포지션으로 위치
   return (
     <div>
       <div>
         <div>
           <MainTopBox className="main-top-box">
-            <MainTop></MainTop>
+            <MainTop scroll={scroll}></MainTop>
           </MainTopBox>
           <div className="main-search"></div>
           <div className="main-notice"></div>
