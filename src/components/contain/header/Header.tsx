@@ -194,6 +194,7 @@ function Header({ scroll }: { scroll: number }) {
     });
     return (
       <MenuItemBox
+        key={menu.id}
         ref={itemRefArr[i]}
         onMouseEnter={handleHoverBorder}
         onMouseLeave={handleLeaveBorder}

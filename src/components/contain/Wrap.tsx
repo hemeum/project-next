@@ -11,7 +11,7 @@ function Wrap() {
   const handleScroll = throttle(() => {
     console.log("scroll", scroll);
     setScroll(window.scrollY);
-  }, 100);
+  }, 200);
 
   useEffect(() => {
     // throttle은 debounce와 달리 이벤트가 바로 실행되었다가 몇초 간격으로 다시 실행해주는 것이기 때문에, 빈배열에 scroll을 넣어주게 되면, 연속적으로 계속 실행하는 것과 같다. 따라서 비워주자.
