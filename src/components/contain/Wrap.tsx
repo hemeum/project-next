@@ -3,14 +3,15 @@ import Main from "src/components/contain/main/Main";
 
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { throttle } from "lodash";
+import { indexOf, throttle } from "lodash";
 
 function Wrap() {
   const [scroll, setScroll] = useState(0);
 
   const handleScroll = throttle(() => {
-    console.log("scroll", scroll);
-    setScroll(window.scrollY);
+    if (window.scrollY < 100) {
+      setScroll(window.scrollY);
+    }
   }, 200);
 
   useEffect(() => {
