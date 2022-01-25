@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Link from "next/link";
 
 function MainVideo() {
   const settings = {
@@ -20,12 +21,16 @@ function MainVideo() {
   ];
   const videoList = arr.map((video) => {
     return (
-      <div>
-        <img src="/img/video-1.jpg"></img>
-        <TextBox>
-          <p>1</p>
-          <p>{video}</p>
-        </TextBox>
+      <div key={video}>
+        <Link href="/">
+          <a>
+            <img src="/img/video-1.jpg" alt="추천 영상 이미지"></img>
+            <TextBox>
+              <p>1</p>
+              <p>{video}</p>
+            </TextBox>
+          </a>
+        </Link>
       </div>
     );
   });

@@ -9,7 +9,7 @@ function MainRow() {
           <h2>업데이트</h2>
           <Link href="/">
             <a>
-              <img src="/img/update-1.jpg"></img>
+              <img src="/img/update-1.jpg" alt="업데이트 이미지"></img>
             </a>
           </Link>
           <Link href="/">
@@ -22,7 +22,7 @@ function MainRow() {
           <h2>핵심 가이드</h2>
           <Link href="/">
             <a>
-              <img src="/img/guide-1.jpg"></img>
+              <img src="/img/guide-1.jpg" alt="가이드 이미지"></img>
             </a>
           </Link>
           <Link href="/">
@@ -35,12 +35,12 @@ function MainRow() {
           <h2>리샤의 편지</h2>
           <Link href="/">
             <a>
-              <img src="/img/event-1.jpg"></img>
+              <img src="/img/event-1.jpg" alt="이벤트 이미지"></img>
             </a>
           </Link>
           <Link href="/">
             <a>
-              <img src="/img/benefit-1.jpg"></img>
+              <img src="/img/benefit-1.jpg" alt="피시방 혜택 이미지"></img>
             </a>
           </Link>
           <Link href="/">
