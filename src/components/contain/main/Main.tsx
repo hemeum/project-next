@@ -2,6 +2,8 @@ import MainTop from "./main-top/MainTop";
 import MainSearch from "./main-search/MainSearch";
 import MainRow from "./main-row/MainRow";
 import MainVideo from "./main-video/MainVideo";
+import MainGuide from "./main-guide/MainGuide";
+import MainContents from "./main-contents/MainContents";
 
 import styled from "styled-components";
 
@@ -23,8 +25,12 @@ function Main({ scroll }: { scroll: number }) {
           <MainVideoBox>
             <MainVideo></MainVideo>
           </MainVideoBox>
-          <div className="main-guide"></div>
-          <div className="main-cons"></div>
+          <MainGuideBox>
+            <MainGuide></MainGuide>
+          </MainGuideBox>
+          <MainConBox>
+            <MainContents />
+          </MainConBox>
         </div>
         <aside></aside>
         <button></button>
@@ -65,8 +71,22 @@ const MainVideoBox = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 800px;
+  height: 790px;
   background-color: #c0c0c0;
+`;
+
+const MainGuideBox = styled.div`
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 440px;
+`;
+
+const MainConBox = styled.div`
+  display: flex;
+  width: 100%;
+  height: 600px;
 `;
 
 export default Main;
