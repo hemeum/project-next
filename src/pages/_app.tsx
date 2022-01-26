@@ -1,10 +1,12 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 import Gnb from "src/components/Gnb";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -15,7 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           crossOrigin="anonymous"
         />
       </Head>
-      <Gnb></Gnb>
+      {router.pathname === "/user/login" ? undefined : <Gnb></Gnb>}
       <Component {...pageProps} />
     </>
   );

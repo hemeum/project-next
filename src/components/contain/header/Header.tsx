@@ -2,8 +2,11 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { debounce } from "lodash";
+import { useRouter } from "next/router";
 
 function Header({ scroll }: { scroll: number }) {
+  const router = useRouter();
+
   const [gameBt, setGameBt] = useState(false);
   const [size, setSize] = useState(0);
 
@@ -231,7 +234,19 @@ function Header({ scroll }: { scroll: number }) {
           </Prac>
         </InnerL>
         <InnerR>
-          <button type="button">LOGIN</button>
+          <Link href="/user/login">
+            <a
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "red";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "#fff";
+              }}
+            >
+              LOGIN
+            </a>
+          </Link>
+
           {gameBt ? (
             <img
               src="/img/header-gamestart-bt-hover.png"
@@ -385,14 +400,10 @@ const InnerR = styled.div`
   right: 0;
   display: flex;
   align-items: center;
-  button {
+  a {
     font-size: 16px;
     color: #fff;
     margin-right: 20px;
-    border: 0;
-    outline: 0;
-    background-color: transparent;
-    cursor: pointer;
   }
 `;
 
