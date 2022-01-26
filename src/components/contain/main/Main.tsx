@@ -4,6 +4,7 @@ import MainRow from "./main-row/MainRow";
 import MainVideo from "./main-video/MainVideo";
 import MainGuide from "./main-guide/MainGuide";
 import MainContents from "./main-contents/MainContents";
+import Footer from "../footer/Footer";
 
 import styled from "styled-components";
 
@@ -32,11 +33,7 @@ function Main({ scroll }: { scroll: number }) {
             <MainContents />
           </MainConBox>
         </div>
-        <aside></aside>
-        <button></button>
-        <div>
-          <img src=""></img>
-        </div>
+        <Footer></Footer>
       </div>
     </div>
   );
