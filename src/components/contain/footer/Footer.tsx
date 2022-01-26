@@ -44,7 +44,7 @@ const Foot = styled.div`
   position: relative;
   width: 100%;
   height: 250px;
-  background-color: #666;
+  background-color: #212226;
   > div {
     margin-top: 50px;
     position: absolute;
