@@ -206,7 +206,7 @@ const NoticeBox = styled.div`
   width: 100%;
   height: 228px;
   padding: 30px 20px;
-  background-color: #333;
+  background-color: #2f3239;
   > a {
     position: absolute;
     top: 30px;

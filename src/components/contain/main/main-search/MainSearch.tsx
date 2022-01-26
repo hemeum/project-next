@@ -26,7 +26,7 @@ const SearchBox = styled.div`
   justify-content: space-evenly;
   width: 1260px;
   height: 80px;
-  background-color: #333;
+  background-color: #2b2f3a;
 `;
 
 const SearchInput = styled.div`

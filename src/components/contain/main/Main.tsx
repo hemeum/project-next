@@ -69,7 +69,7 @@ const MainVideoBox = styled.div`
   left: 0;
   width: 100%;
   height: 790px;
-  background-color: #c0c0c0;
+  background-color: #e9e9e9;
 `;
 
 const MainGuideBox = styled.div`
