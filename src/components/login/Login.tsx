@@ -1,10 +1,20 @@
 import styled from "styled-components";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 function Login() {
+  const router = useRouter();
+  const handleRegister = () => {
+    router.push("/user/register");
+  };
   return (
     <WrapLogin>
       <Logo>
-        <img src="/img/logo-stv.png" />
+        <Link href="/">
+          <a>
+            <img src="/img/logo-stv.png" />
+          </a>
+        </Link>
       </Logo>
       <LoginBox>
         <div>
@@ -14,10 +24,16 @@ function Login() {
           </SelectLogin>
 
           <Form>
-            <input type="text" placeholder="아이디"></input>
-            <br />
-            <input type="password" placeholder="비밀번호"></input>
-            <br />
+            <div>
+              <label></label>
+              <input type="text" placeholder="아이디"></input>
+            </div>
+
+            <div>
+              <label></label>
+              <input type="password" placeholder="비밀번호"></input>
+            </div>
+
             <button type="submit">로그인</button>
           </Form>
           <ButtonBox>
@@ -25,7 +41,9 @@ function Login() {
             &nbsp;&nbsp;<span>|</span>&nbsp;&nbsp;
             <button type="button"> 비밀번호 찾기</button>
             &nbsp;&nbsp;<span>|</span>&nbsp;&nbsp;
-            <button type="button">회원가입</button>
+            <button type="button" onClick={handleRegister}>
+              회원가입
+            </button>
           </ButtonBox>
           <LineBox>
             <div></div>
@@ -33,11 +51,11 @@ function Login() {
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <div></div>
           </LineBox>
-          <div>
+          <RestLoginBox>
             <img src="/img/logo-naver.png"></img>
             <img src="/img/logo-kakao.png"></img>
             <img src="/img/logo-google.png"></img>
-          </div>
+          </RestLoginBox>
         </div>
       </LoginBox>
     </WrapLogin>
@@ -49,7 +67,7 @@ const WrapLogin = styled.div`
 `;
 
 const Logo = styled.h1`
-  margin-top: 40px;
+  margin-top: 30px;
   img {
     width: 250px;
     height: 110px;
@@ -158,6 +176,17 @@ const LineBox = styled.div`
   p {
     font-size: 14px;
     color: #ccc;
+  }
+`;
+
+const RestLoginBox = styled.div`
+  margin-top: 50px;
+  img:nth-of-type(2) {
+    margin: 0 30px;
+  }
+  img:nth-of-type(3) {
+    border: 1px solid lightgray;
+    border-radius: 50%;
   }
 `;
 
