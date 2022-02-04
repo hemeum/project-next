@@ -8,10 +8,10 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "isolatedModules": true, // false로 하면 모듈 불러올 때 const ~ require / true로 하면 모듈 불러올 때 import ~ from
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": "."
