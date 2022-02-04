@@ -12,12 +12,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <link
           rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+          href="/releases/v5.14.0/css/all.css"
           integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
           crossOrigin="anonymous"
         />
       </Head>
-      {router.pathname === "/user/login" ? undefined : <Gnb></Gnb>}
+      {router.pathname === "/user/login" ||
+      router.pathname === "/user/register" ? undefined : (
+        <Gnb></Gnb>
+      )}
       <Component {...pageProps} />
     </>
   );

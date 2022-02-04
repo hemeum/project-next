@@ -1,7 +1,7 @@
 import Login from "src/components/login/Login";
 
-function UserLogin() {
+function PageLogin() {
   return <Login></Login>;
 }
 
-export default UserLogin;
+export default PageLogin;
