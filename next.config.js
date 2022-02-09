@@ -2,7 +2,7 @@
 module.exports = {
   reactStrictMode: true,
   async rewrites() {
-    // express 서버와 proxy로 연동
+    // express 서버와 연동
     return [
       {
         source: "/:path*",

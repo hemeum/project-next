@@ -12,9 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <link
           rel="stylesheet"
-          href="/releases/v5.14.0/css/all.css"
-          integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
-          crossOrigin="anonymous"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
         />
       </Head>
       {router.pathname === "/user/login" ||
