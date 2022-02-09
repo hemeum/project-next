@@ -3,10 +3,13 @@ import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { debounce } from "lodash";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 function Header({ scroll }: { scroll: number }) {
   const router = useRouter();
 
+  const [nickname, setNickname] = useState<any>("");
+  const [isLogin, setIsLogin] = useState(false);
   const [gameBt, setGameBt] = useState(false);
   const [size, setSize] = useState(0);
 
@@ -53,6 +56,21 @@ function Header({ scroll }: { scroll: number }) {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
+  }, []);
+
+  useEffect(() => {
+    // 로그인한 후 로그인한 nickname 보여주기
+    if (router.query.nickname !== null) {
+      setNickname(router.query.nickname);
+    }
+  }, []);
+
+  useEffect(() => {
+    // 이 부분은 ssr로 해보자. get~~
+    axios.get("/auth/keep_login", { withCredentials: true }).then((res) => {
+      setNickname(res.data.nickname);
+      setIsLogin(res.data.isLogin);
+    });
   }, []);
 
   const handleResize = debounce(() => {
@@ -234,18 +252,33 @@ function Header({ scroll }: { scroll: number }) {
           </Prac>
         </InnerL>
         <InnerR>
-          <Link href="/user/login">
-            <a
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = "red";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = "#fff";
-              }}
-            >
-              LOGIN
-            </a>
-          </Link>
+          {!isLogin ? (
+            <Link href="/user/login">
+              <a
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "red";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "#fff";
+                }}
+              >
+                LOGIN
+              </a>
+            </Link>
+          ) : (
+            <Link href="/">
+              <a
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "red";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "#fff";
+                }}
+              >
+                {nickname}
+              </a>
+            </Link>
+          )}
 
           {gameBt ? (
             <img

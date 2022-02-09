@@ -1,12 +1,46 @@
 import styled from "styled-components";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import Link from "next/link";
+import useInput from "src/hooks/useInput";
+import axios from "axios";
 
 function Login() {
+  const username = useInput();
+  const pwd = useInput();
+
   const router = useRouter();
+
   const handleRegister = () => {
     router.push("/user/register");
   };
+
+  const handleLogin = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    console.log(1);
+    if (username.inputValue.length !== 0 && pwd.inputValue.length !== 0) {
+      axios
+        .post("/auth/login", {
+          username: username.inputValue,
+          password: pwd.inputValue,
+        })
+        .then((res) => {
+          // 로그인 성공
+          // '/'로 이동하면서 query string에 nickname data를 전달, 그냥 전달하면 url에 nickname이 쿼리스트링으로 보임. url에서 쿼리스트링을 감추기 위해 2번째 인자로 '/'
+          // setIsLogin(res.data.isLogin)
+          Router.push(
+            { pathname: "/", query: { nickname: res.data.nickname } },
+            "/",
+          );
+        })
+        .catch((err) => {
+          // 로그인 실패
+          window.alert(err.response.data);
+        });
+    } else {
+      window.alert("먼저 아이디와 비밀번호를 입력해주세요.");
+    }
+  };
+
   return (
     <WrapLogin>
       <Logo>
@@ -23,18 +57,34 @@ function Login() {
             <div>일회용 로그인</div>
           </SelectLogin>
 
-          <Form>
+          <Form method="post">
             <div>
               <label></label>
-              <input type="text" placeholder="아이디"></input>
+              <input
+                type="text"
+                value={username.inputValue}
+                name="username"
+                placeholder="아이디"
+                onChange={username.handleInputValue}
+              ></input>
             </div>
 
             <div>
               <label></label>
-              <input type="password" placeholder="비밀번호"></input>
+              <input
+                type="password"
+                value={pwd.inputValue}
+                name="pwd"
+                placeholder="비밀번호"
+                onChange={pwd.handleInputValue}
+              ></input>
             </div>
 
-            <button type="submit">로그인</button>
+            <SubmitInput
+              type="submit"
+              onClick={handleLogin}
+              value="로그인"
+            ></SubmitInput>
           </Form>
           <ButtonBox>
             <button type="button">아이디 찾기</button>
@@ -147,6 +197,17 @@ const Form = styled.form`
       font-weight: bold;
     }
   }
+`;
+
+const SubmitInput = styled.input`
+  width: 400px;
+  height: 55px;
+  font-size: 17px;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 40px;
+  background-color: #fd5001 !important;
+  cursor: pointer;
 `;
 
 const ButtonBox = styled.div`

@@ -1,7 +1,20 @@
 import Link from "next/link";
 import styled from "styled-components";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 
 function Gnb() {
+  const router = useRouter();
+
+  const [nickname, setNickname] = useState<any>("");
+
+  useEffect(() => {
+    // 로그인한 후 로그인한 nickname 보여주기
+    if (router.query.nickname !== null) {
+      setNickname(router.query.nickname);
+    }
+  }, []);
+
   return (
     <Wrap>
       <Inner>
@@ -21,7 +34,7 @@ function Gnb() {
       </Inner>
       <Service>
         <i className="fas fa-bars"></i>
-        <p>로그인</p>
+        <p>{nickname ? nickname : "로그인"}</p>
       </Service>
     </Wrap>
   );
