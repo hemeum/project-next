@@ -2,14 +2,16 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { debounce } from "lodash";
-import { useRouter } from "next/router";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
 
 function Header({ scroll }: { scroll: number }) {
-  const router = useRouter();
+  const { isLogin, nickname } = useSelector((state: any) => {
+    return state.authReducer;
+  });
 
-  const [nickname, setNickname] = useState<any>("");
-  const [isLogin, setIsLogin] = useState(false);
+  const dispatch = useDispatch();
+
   const [gameBt, setGameBt] = useState(false);
   const [size, setSize] = useState(0);
 
@@ -59,18 +61,7 @@ function Header({ scroll }: { scroll: number }) {
   }, []);
 
   useEffect(() => {
-    // 로그인한 후 로그인한 nickname 보여주기
-    if (router.query.nickname !== null) {
-      setNickname(router.query.nickname);
-    }
-  }, []);
-
-  useEffect(() => {
-    // 이 부분은 ssr로 해보자. get~~
-    axios.get("/auth/keep_login", { withCredentials: true }).then((res) => {
-      setNickname(res.data.nickname);
-      setIsLogin(res.data.isLogin);
-    });
+    dispatch({ type: "LOGIN_KEEP_REQUEST" });
   }, []);
 
   const handleResize = debounce(() => {
@@ -121,6 +112,15 @@ function Header({ scroll }: { scroll: number }) {
     const parent = e.currentTarget.parentNode.childNodes;
     const index = [...parent].indexOf(e.currentTarget);
     menuRefArr[index].current.style.borderBottom = "none";
+  };
+
+  const handleLogout = () => {
+    const logout = confirm("로그아웃 하시겠습니까?");
+    if (logout) {
+      dispatch({ type: "LOGOUT_REQUEST" });
+    } else {
+      return;
+    }
   };
 
   if (headerRef.current !== null) {
@@ -274,6 +274,7 @@ function Header({ scroll }: { scroll: number }) {
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = "#fff";
                 }}
+                onClick={handleLogout}
               >
                 {nickname}
               </a>

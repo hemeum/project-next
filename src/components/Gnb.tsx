@@ -1,19 +1,11 @@
 import Link from "next/link";
 import styled from "styled-components";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 function Gnb() {
-  const router = useRouter();
-
-  const [nickname, setNickname] = useState<any>("");
-
-  useEffect(() => {
-    // 로그인한 후 로그인한 nickname 보여주기
-    if (router.query.nickname !== null) {
-      setNickname(router.query.nickname);
-    }
-  }, []);
+  const nickname = useSelector((state: any) => {
+    return state.authReducer.nickname;
+  });
 
   return (
     <Wrap>
@@ -34,7 +26,7 @@ function Gnb() {
       </Inner>
       <Service>
         <i className="fas fa-bars"></i>
-        <p>{nickname ? nickname : "로그인"}</p>
+        <p>{nickname.length !== 0 ? nickname : "로그인"}</p>
       </Service>
     </Wrap>
   );

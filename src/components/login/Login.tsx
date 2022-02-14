@@ -3,12 +3,14 @@ import Router, { useRouter } from "next/router";
 import Link from "next/link";
 import useInput from "src/hooks/useInput";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 
 function Login() {
   const username = useInput();
   const pwd = useInput();
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleRegister = () => {
     router.push("/user/register");
@@ -16,9 +18,8 @@ function Login() {
 
   const handleLogin = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log(1);
     if (username.inputValue.length !== 0 && pwd.inputValue.length !== 0) {
-      axios
+      /*axios
         .post("/auth/login", {
           username: username.inputValue,
           password: pwd.inputValue,
@@ -35,7 +36,12 @@ function Login() {
         .catch((err) => {
           // 로그인 실패
           window.alert(err.response.data);
-        });
+        });*/
+
+      dispatch({
+        type: "LOGIN_REQUEST",
+        payload: { username: username.inputValue, password: pwd.inputValue },
+      });
     } else {
       window.alert("먼저 아이디와 비밀번호를 입력해주세요.");
     }
