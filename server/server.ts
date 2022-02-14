@@ -2,12 +2,14 @@ import express from "express";
 import mysql from "mysql";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
+import cookieParser from "cookie-parser";
+import passport from "passport";
+import passportLocal from "passport-local";
+import jwt from "jsonwebtoken";
+import passportJwt from "passport-jwt";
 
-const cookieParser = require("cookie-parser");
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const jwt = require("jsonwebtoken");
-const { ExtractJwt, Strategy: JwtStrategy } = require("passport-jwt");
+const LocalStrategy = passportLocal.Strategy;
+const JwtStrategy = passportJwt.Strategy;
 
 const saltRounds = 10;
 const app = express();
@@ -156,13 +158,13 @@ app.get("/auth/keep_login", (req, res) => {
         if (err) {
           console.log("passport jwt 전략 후 콜백 err");
         } else {
-          res.send({ nickname: user.nickname, isLogin: true });
+          console.log("로그인 토큰 인증 성공!");
+          res.send(user.nickname);
         }
       },
     )(req, res);
   } else {
-    // 보내고 싶은게 없지만, res를 해줘야 할 때 사용
-    res.end();
+    res.status(403).send("쿠키 없음");
   }
 });
 
@@ -220,13 +222,24 @@ app.post("/auth/login", (req, res: any) => {
       } else if (!user) {
         res.status(403).send(info.msg);
       } else {
-        const token = jwt.sign(user.id, process.env.JWT_SECRET_KEY);
+        let secret: any = process.env.JWT_SECRET_KEY;
+        const token = jwt.sign(user.id, secret);
         res
           .cookie("token", token, { httpOnly: true, maxAge: 60 * 60 * 1000 })
-          .send({ nickname: user.nickname, isLogin: true });
+          .send(user.nickname);
       }
     },
   )(req, res);
+});
+
+app.get("/auth/logout", (req, res) => {
+  console.log("로그아웃");
+  res.clearCookie("token").send("로그아웃");
+});
+
+app.get("/test", (req, res) => {
+  let a = [1, 2, 3];
+  res.send(a);
 });
 
 app.listen(6000, () => {
