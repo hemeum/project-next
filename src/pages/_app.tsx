@@ -5,7 +5,13 @@ import { useRouter } from "next/router";
 
 import Gnb from "src/components/Gnb";
 
+import { createWrapper } from "next-redux-wrapper";
+const store = require("src/redux/store");
+
+export const wrapper = createWrapper(store);
+
 function MyApp({ Component, pageProps }: AppProps) {
+  // _app.tsx가 CRA의 index.js와 같은 역할. '/'역할을 함.
   const router = useRouter();
   return (
     <>
@@ -24,4 +30,5 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+// _app.tsx에게 withRedux HOC로 store를 주입. 다른 페이지에서 redux store에 접근 가능.
+export default wrapper.withRedux(MyApp);
