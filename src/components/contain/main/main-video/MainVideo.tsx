@@ -3,22 +3,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
-function MainVideo() {
-  const [youtubeList, setYoutubeList] = useState([]);
-  useEffect(() => {
-    axios
-      .get(
-        `https://www.googleapis.com/youtube/v3/playlistItems?playlistId=PLXJUV6UcSL2y6LQ0twqDA7fC4ybZtRB9O&part=snippet,id&order=date&maxResults=24&channelID=UCL3gnarNIeI_M0cFxjNYdAA&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}`,
-      )
-      .then((res) => {
-        console.log(res.data);
-        setYoutubeList(res.data.items);
-      });
-  }, []);
-
+function MainVideo({ youtubeList }: { youtubeList: [] }) {
   const settings = {
     dots: true,
     infinite: true,
@@ -30,7 +16,7 @@ function MainVideo() {
     autoplaySpeed: 4000,
   };
 
-  const videoList = youtubeList.map((video: any, index) => {
+  const videoList = youtubeList?.map((video: any, index: number) => {
     return (
       <div key={index}>
         <Link href="/">

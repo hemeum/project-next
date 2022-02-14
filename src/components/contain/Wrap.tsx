@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { throttle } from "lodash";
 
-function Wrap() {
+function Wrap({ youtubeList }: any) {
   const [scroll, setScroll] = useState(0);
 
   const handleScroll = throttle(() => {
@@ -27,7 +27,7 @@ function Wrap() {
     <WrapAll>
       <Header scroll={scroll}></Header>
       <WrapMain>
-        <Main scroll={scroll}></Main>
+        <Main youtubeList={youtubeList} scroll={scroll}></Main>
       </WrapMain>
       <Bg></Bg>
     </WrapAll>

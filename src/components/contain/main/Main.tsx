@@ -8,7 +8,7 @@ import Footer from "../footer/Footer";
 
 import styled from "styled-components";
 
-function Main({ scroll }: { scroll: number }) {
+function Main({ scroll, youtubeList }: { scroll: number; youtubeList: [] }) {
   // main-top-box에게 높이주고, 그 안에 MainTop은 박스 안에서 포지션으로 위치
   return (
     <div>
@@ -24,7 +24,7 @@ function Main({ scroll }: { scroll: number }) {
             <MainRow></MainRow>
           </MainRowBox>
           <MainVideoBox>
-            <MainVideo></MainVideo>
+            <MainVideo youtubeList={youtubeList}></MainVideo>
           </MainVideoBox>
           <MainGuideBox>
             <MainGuide></MainGuide>
