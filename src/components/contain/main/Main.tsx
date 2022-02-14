@@ -68,7 +68,7 @@ const MainVideoBox = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 790px;
+  height: 830px;
   background-color: #e9e9e9;
 `;
 

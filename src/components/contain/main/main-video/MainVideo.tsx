@@ -3,8 +3,22 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function MainVideo() {
+  const [youtubeList, setYoutubeList] = useState([]);
+  useEffect(() => {
+    axios
+      .get(
+        `https://www.googleapis.com/youtube/v3/playlistItems?playlistId=PLXJUV6UcSL2y6LQ0twqDA7fC4ybZtRB9O&part=snippet,id&order=date&maxResults=24&channelID=UCL3gnarNIeI_M0cFxjNYdAA&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}`,
+      )
+      .then((res) => {
+        console.log(res.data);
+        setYoutubeList(res.data.items);
+      });
+  }, []);
+
   const settings = {
     dots: true,
     infinite: true,
@@ -15,19 +29,19 @@ function MainVideo() {
     autoplay: true,
     autoplaySpeed: 4000,
   };
-  const arr = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24,
-  ];
-  const videoList = arr.map((video) => {
+
+  const videoList = youtubeList.map((video: any, index) => {
     return (
-      <div key={video}>
+      <div key={index}>
         <Link href="/">
           <a>
-            <img src="/img/video-1.jpg" alt="추천 영상 이미지"></img>
+            <img
+              src={video.snippet.thumbnails.medium.url}
+              alt="추천 영상 이미지"
+            ></img>
             <TextBox>
-              <p>1</p>
-              <p>{video}</p>
+              <p>{video.snippet.title}</p>
+              <p>{video.snippet.videoOwnerChannelTitle}</p>
             </TextBox>
           </a>
         </Link>
@@ -64,16 +78,26 @@ const StyleSlider = styled(Slider)`
   div {
     img {
       width: 100%;
-      height: 170px;
+      height: 180px;
     }
   }
 `;
 
 const TextBox = styled.div`
   width: 100%;
-  height: 120px;
+  height: 140px;
   background-color: #fff;
   padding: 20px;
+  p:first-child {
+    font-weight: bold;
+    font-size: 16px;
+    height: 85px;
+  }
+  p:last-child {
+    font-size: 14px;
+    color: blue;
+    margin-top: 5px;
+  }
 `;
 
 export default MainVideo;
