@@ -43,6 +43,7 @@ function Footer() {
 const Foot = styled.div`
   position: relative;
   width: 100%;
+  min-width: 1280px;
   height: 250px;
   background-color: #212226;
   > div {
