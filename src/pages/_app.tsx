@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import Gnb from "src/components/Gnb";
 
 import { createWrapper } from "next-redux-wrapper";
+import Header from "src/components/contain/header/Header";
 const store = require("src/redux/store");
 
 export const wrapper = createWrapper(store);
@@ -20,6 +21,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
         />
+        <script
+          src="https://kit.fontawesome.com/2f64c83195.js"
+          crossOrigin="anonymous"
+        ></script>
+        <title>lost-ark</title>
       </Head>
       {router.pathname === "/user/login" ||
       router.pathname === "/user/register" ? undefined : (
