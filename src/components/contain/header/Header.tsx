@@ -4,16 +4,10 @@ import styled from "styled-components";
 import { debounce } from "lodash";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
+import { throttle } from "lodash";
 
-function Header({ scroll }: { scroll: number }) {
-  const { isLogin, nickname } = useSelector((state: any) => {
-    return state.authReducer;
-  });
-
-  const dispatch = useDispatch();
-
+function Header() {
   const [gameBt, setGameBt] = useState(false);
-  const [size, setSize] = useState(0);
 
   const itemsRef1 = useRef<HTMLUListElement>(null);
   const itemsRef2 = useRef<HTMLUListElement>(null);
@@ -50,6 +44,35 @@ function Header({ scroll }: { scroll: number }) {
     menuRef6,
   ];
 
+  /* redux 관련 */
+  const { isLogin, nickname } = useSelector((state: any) => {
+    return state.authReducer;
+  });
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({ type: "LOGIN_KEEP_REQUEST" });
+  }, []);
+
+  /* 로그아웃 redux */
+  const handleLogout = () => {
+    const logout = confirm("로그아웃 하시겠습니까?");
+    if (logout) {
+      dispatch({ type: "LOGOUT_REQUEST" });
+    } else {
+      return;
+    }
+  };
+
+  /* window resize 관련 */
+  const [size, setSize] = useState(0);
+
+  const handleResize = debounce(() => {
+    console.log("resize", size);
+    setSize(window.innerWidth);
+  }, 300);
+
   useEffect(() => {
     // 빈배열에 size값 넣어도 되고, 안넣어도 됌. 넣지않으면 첫 실행되었을 때 값을 계속 유지함
     setSize(window.innerWidth);
@@ -60,25 +83,47 @@ function Header({ scroll }: { scroll: number }) {
     };
   }, []);
 
+  /* scroll 관련 */
+  const [scroll, setScroll] = useState(0);
+
+  const handleScroll = throttle(() => {
+    if (window.scrollY < 100) {
+      setScroll(window.scrollY);
+    }
+  }, 200);
+
   useEffect(() => {
-    dispatch({ type: "LOGIN_KEEP_REQUEST" });
+    // throttle은 debounce와 달리 이벤트가 바로 실행되었다가 몇초 간격으로 다시 실행해주는 것이기 때문에, 빈배열에 scroll을 넣어주게 되면, 연속적으로 계속 실행하는 것과 같다. 따라서 비워주자.
+    setScroll(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
-  const handleResize = debounce(() => {
-    console.log("resize", size);
-    setSize(window.innerWidth);
-  }, 300);
+  if (headerRef.current !== null) {
+    // css 우선순위에 의해서 styled-compo로 적용하는 스타일과 ref로 적용하는 스타일이 겹친다면 ref는 인라인 스타일로 class로 작성한 스타일보다 우선순위가 높다. 그러니 하나의 스타일을 바꿀 경우엔 통일한 방식으로 변경해주자.
+    if (scroll > 0) {
+      headerRef.current.style.backgroundColor = "black";
+    } else if (scroll === 0) {
+      headerRef.current.style.backgroundColor = "transparent";
+    }
+  }
 
+  /* 마우스 hover and leave 관련 */
   const handleHover = () => {
     if (pracRef.current !== null) {
       pracRef.current.style.height = "250px";
       pracRef.current.style.opacity = "1";
       pracRef.current.style.visibility = "visible";
       pracRef.current.style.transition =
-        "height 0.5s ease, opacity 0.2s ease, visibility 0.2s ease";
+        "height 0.2s ease, opacity 0.2s ease, visibility 0.2s ease";
     }
 
     if (headerRef.current !== null) {
+      if (headerRef.current.style.backgroundColor === "transparent") {
+        headerRef.current.style.backgroundColor = "black";
+      }
       headerRef.current.style.backgroundColor = "black";
       headerRef.current.style.transition = "background-color 0.2s ease";
     }
@@ -98,7 +143,7 @@ function Header({ scroll }: { scroll: number }) {
       } else {
         headerRef.current.style.backgroundColor = "black";
       }
-      headerRef.current.style.transition = "background-color 0.3s ease";
+      headerRef.current.style.transition = "background-color 0.2s ease";
     }
   };
 
@@ -114,78 +159,66 @@ function Header({ scroll }: { scroll: number }) {
     menuRefArr[index].current.style.borderBottom = "none";
   };
 
-  const handleLogout = () => {
-    const logout = confirm("로그아웃 하시겠습니까?");
-    if (logout) {
-      dispatch({ type: "LOGOUT_REQUEST" });
-    } else {
-      return;
-    }
-  };
-
-  if (headerRef.current !== null) {
-    // css 우선순위에 의해서 styled-compo로 적용하는 스타일과 ref로 적용하는 스타일이 겹친다면 ref는 인라인 스타일로 class로 작성한 스타일보다 우선순위가 높다. 그러니 하나의 스타일을 바꿀 경우엔 통일한 방식으로 변경해주자.
-    if (scroll > 0) {
-      headerRef.current.style.backgroundColor = "black";
-    } else if (scroll === 0) {
-      headerRef.current.style.backgroundColor = "transparent";
-    }
-  }
-
   const menuList = [
     {
       id: 1,
       menu: "새소식",
       items: [
-        { id: 7, item: "공지사항" },
-        { id: 8, item: "공지사항" },
-        { id: 9, item: "공지사항" },
+        { id: 7, item: "공지사항", url: "/" },
+        { id: 8, item: "공지사항", url: "/" },
+        { id: 9, item: "공지사항", url: "/" },
       ],
+      url: "/",
     },
     {
       id: 2,
       menu: "게임정보",
       items: [
-        { id: 10, item: "공지사항" },
-        { id: 11, item: "공지사항" },
-        { id: 12, item: "공지사항" },
+        { id: 10, item: "공지사항", url: "/" },
+        { id: 11, item: "공지사항", url: "/" },
+        { id: 12, item: "공지사항", url: "/" },
       ],
+      url: "/",
     },
     {
       id: 3,
       menu: "가이드",
       items: [
-        { id: 13, item: "공지사항" },
-        { id: 14, item: "공지사항" },
-        { id: 15, item: "공지사항" },
+        { id: 13, item: "공지사항", url: "/" },
+        { id: 14, item: "공지사항", url: "/" },
+        { id: 15, item: "공지사항", url: "/" },
       ],
+      url: "/",
     },
     {
       id: 4,
       menu: "커뮤니티",
       items: [
-        { id: 16, item: "공지사항" },
-        { id: 17, item: "공지사항" },
-        { id: 18, item: "공지사항" },
+        { id: 16, item: "자유게시판", url: "/community/freelist" },
+        { id: 17, item: "공지사항", url: "/" },
+        { id: 18, item: "공지사항", url: "/" },
       ],
+      url: "/",
     },
     {
       id: 5,
       menu: "미디어",
       items: [
-        { id: 19, item: "공지사항" },
-        { id: 20, item: "공지사항" },
-        { id: 21, item: "공지사항" },
+        { id: 19, item: "공지사항", url: "/" },
+        { id: 20, item: "공지사항", url: "/" },
+        { id: 21, item: "공지사항", url: "/" },
       ],
+      url: "/",
     },
     {
       id: 6,
       menu: "고객센터",
       items: [
-        { id: 22, item: "공지사항" },
-        { id: 23, item: "공지사항" },
-        { id: 24, item: "공지사항" },
+        { id: 22, item: "공지사항", url: "/" },
+        { id: 23, item: "공지사항", url: "/" },
+        { id: 24, item: "공지사항", url: "/" },
       ],
+      url: "/",
     },
   ];
 
@@ -196,7 +229,7 @@ function Header({ scroll }: { scroll: number }) {
         onMouseEnter={handleHoverBorder}
         onMouseLeave={handleLeaveBorder}
       >
-        <Link href="/">
+        <Link href={m.url}>
           <a ref={menuRefArr[i]}>{m.menu}</a>
         </Link>
       </MenuList>
@@ -207,7 +240,7 @@ function Header({ scroll }: { scroll: number }) {
     const items = menu.items.map((item) => {
       return (
         <MenuListItem key={item.id}>
-          <Link href="/">
+          <Link href={item.url}>
             <a>{item.item}</a>
           </Link>
         </MenuListItem>
