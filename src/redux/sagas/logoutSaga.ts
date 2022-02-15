@@ -8,7 +8,7 @@ function logout() {
 
 function* logoutSaga() {
   try {
-    const res: { data: string } = yield call(logout);
+    yield call(logout);
     yield put({ type: "auth/LOGOUT_SUCCESS" });
   } catch (err: any) {
     window.alert(err.response.data);
