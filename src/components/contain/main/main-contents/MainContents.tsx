@@ -35,7 +35,7 @@ function MainContents() {
           <ul>{leftImgs}</ul>
           <Link href="/">
             <a>
-              <i className="fas fa-plus"></i>
+              <i aria-hidden className="fas fa-plus"></i>
             </a>
           </Link>
         </LeftBox>

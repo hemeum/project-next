@@ -66,7 +66,7 @@ function ContentsRight() {
             <a>
               <div>
                 <p>클래스 소개</p>
-                <i className="fas fa-chevron-right"></i>
+                <i aria-hidden className="fas fa-chevron-right"></i>
               </div>
             </a>
           </Link>
@@ -74,7 +74,7 @@ function ContentsRight() {
             <a>
               <div>
                 <p>영상 소개</p>
-                <i className="fas fa-chevron-right"></i>
+                <i aria-hidden className="fas fa-chevron-right"></i>
               </div>
             </a>
           </Link>
@@ -89,7 +89,7 @@ function ContentsRight() {
         <a>
           <ClassInfo>
             <p>클래스 더보기</p>
-            <i className="fas fa-plus"></i>
+            <i aria-hidden className="fas fa-plus"></i>
           </ClassInfo>
         </a>
       </Link>

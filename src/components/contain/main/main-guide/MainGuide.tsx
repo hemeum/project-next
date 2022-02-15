@@ -46,7 +46,7 @@ function MainGuide() {
         <ul>{guides}</ul>
         <div>
           <input type="text" placeholder="검색어를 입력해주세요"></input>
-          <i className="fas fa-search"></i>
+          <i aria-hidden className="fas fa-search"></i>
         </div>
       </GuideTop>
       <GuideImgs>{imgs}</GuideImgs>

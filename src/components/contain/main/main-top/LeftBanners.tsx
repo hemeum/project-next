@@ -275,7 +275,11 @@ function LeftBanners() {
       </Imgs>
       <BannerList>
         <div>
-          <i className="fas fa-chevron-left" onClick={handleBannerLArrow}></i>
+          <i
+            aria-hidden
+            className="fas fa-chevron-left"
+            onClick={handleBannerLArrow}
+          ></i>
           <div>
             <BannerItembox ref={boxRef}>
               <BannerItem sel={sels[0]} onClick={handleBanner}>
@@ -298,7 +302,11 @@ function LeftBanners() {
               </BannerItem>
             </BannerItembox>
           </div>
-          <i className="fas fa-chevron-right" onClick={handleBannerRArrow}></i>
+          <i
+            aria-hidden
+            className="fas fa-chevron-right"
+            onClick={handleBannerRArrow}
+          ></i>
           <p>
             <span>{[...zIndexs].reverse()[0]}</span> / 6
           </p>

@@ -86,10 +86,18 @@ function RightBanners() {
         <ul>{imgList}</ul>
         <ArrowBox>
           <div>
-            <i className="fas fa-chevron-left" onClick={handleLArrow}></i>
+            <i
+              aria-hidden
+              className="fas fa-chevron-left"
+              onClick={handleLArrow}
+            ></i>
             <span>{[...zIndexs].reverse()[0]}</span>
             <span>/</span>3
-            <i className="fas fa-chevron-right" onClick={handleRArrow}></i>
+            <i
+              aria-hidden
+              className="fas fa-chevron-right"
+              onClick={handleRArrow}
+            ></i>
           </div>
         </ArrowBox>
       </RightSlide>
@@ -123,7 +131,7 @@ function RightBanners() {
         </ul>
         <Link href="/">
           <a>
-            <i className="fas fa-plus"></i>
+            <i aria-hidden className="fas fa-plus"></i>
           </a>
         </Link>
       </NoticeBox>

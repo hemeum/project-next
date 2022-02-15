@@ -14,7 +14,7 @@ function MainRow() {
           </Link>
           <Link href="/">
             <a>
-              <i className="fas fa-plus"></i>
+              <i aria-hidden className="fas fa-plus"></i>
             </a>
           </Link>
         </div>
@@ -27,7 +27,7 @@ function MainRow() {
           </Link>
           <Link href="/">
             <a>
-              <i className="fas fa-plus"></i>
+              <i aria-hidden className="fas fa-plus"></i>
             </a>
           </Link>
         </div>
@@ -45,7 +45,7 @@ function MainRow() {
           </Link>
           <Link href="/">
             <a>
-              <i className="fas fa-plus"></i>
+              <i aria-hidden className="fas fa-plus"></i>
             </a>
           </Link>
         </div>
@@ -55,7 +55,7 @@ function MainRow() {
           <Link href="/">
             <a>
               <div>
-                <i className="fas fa-chart-line"></i>
+                <i aria-hidden className="fas fa-chart-line"></i>
               </div>
               <div>
                 <p>구매해야 할 아이템이 있다면?</p>
@@ -68,7 +68,7 @@ function MainRow() {
           <Link href="/">
             <a>
               <div>
-                <i className="fas fa-balance-scale"></i>
+                <i aria-hidden className="fas fa-balance-scale"></i>
               </div>
               <div>
                 <p>더 다양한 물품들을 만나보세요!</p>
@@ -81,7 +81,7 @@ function MainRow() {
           <Link href="/">
             <a>
               <div>
-                <i className="fas fa-store"></i>
+                <i aria-hidden className="fas fa-store"></i>
               </div>
               <div>
                 <p>'성장'과 '전투/생활' 추천 상품 입고!</p>

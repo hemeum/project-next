@@ -3,16 +3,16 @@ import styled from "styled-components";
 import LeftBanners from "./LeftBanners";
 import RightBanners from "./RightBanners";
 
-function MainTop({ scroll }: { scroll: number }) {
+function MainTop() {
   return (
-    <Top scroll={scroll}>
+    <Top>
       <LeftBanners></LeftBanners>
       <RightBanners />
     </Top>
   );
 }
 
-const Top = styled.div<{ scroll: number }>`
+const Top = styled.div`
   position: absolute;
   top: 300px;
   left: 50%;

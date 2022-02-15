@@ -25,7 +25,7 @@ function Gnb() {
         </ul>
       </Inner>
       <Service>
-        <i className="fas fa-bars"></i>
+        <i aria-hidden className="fas fa-bars"></i>
         <p>{nickname.length !== 0 ? nickname : "로그인"}</p>
       </Service>
     </Wrap>

@@ -6,12 +6,12 @@ const MainSearch = () => {
       <SearchInput>
         <h3>전투 정보실</h3>
         <input type="text" placeholder="캐릭터명을 입력해주세요"></input>
-        <i className="fas fa-search"></i>
+        <i aria-hidden className="fas fa-search"></i>
       </SearchInput>
       <SearchInput>
         <h3>게임 가이드</h3>
         <input type="text" placeholder="검색어를 입력해주세요"></input>
-        <i className="fas fa-search"></i>
+        <i aria-hidden className="fas fa-search"></i>
       </SearchInput>
     </SearchBox>
   );
