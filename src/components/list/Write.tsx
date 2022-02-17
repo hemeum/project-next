@@ -1,35 +1,65 @@
 import styled from "styled-components";
 import dynamic from "next/dynamic";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
 
-import ListTop from "./ListTop";
+import PageTop from "./PageTop";
 import Footer from "../contain/footer/Footer";
+import TitleTop from "./TitleTop";
 
 const PostEditor = dynamic(() => import("./PostEditor"), { ssr: false });
 
 export default function Write() {
-  const router = useRouter();
-  console.log(router.pathname);
+  const router: any = useRouter();
+  const { nickname } = useSelector((state: any) => {
+    return state.authReducer;
+  });
+
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    axios
+      .post("/post/add", {
+        nickname: nickname,
+        category: router.query.ctg,
+        title: title,
+        content: content,
+      })
+      .then((res) => {
+        if (router.query.ctg === "자유게시판") {
+          console.log(res.data.postId);
+          router.push(
+            {
+              pathname: `/community/freelist/view/[id]`,
+              query: { ctg: router.query.ctg, postId: res.data.postId },
+            },
+            `/community/freelist/view/${res.data.postId}`,
+          );
+        }
+      });
+  };
+
   return (
     <>
       <Wrap>
-        <ListTop></ListTop>
+        <PageTop></PageTop>
         <EditorBox>
-          <EditorTop>
-            <h2>
-              {router.pathname === "/community/freewrite"
-                ? "자유 게시판"
-                : undefined}
-            </h2>
-            <GoBack>
-              <i aria-hidden className="fa-solid fa-bars"></i>
-              <p>목록가기</p>
-            </GoBack>
-          </EditorTop>
-          <EditorTitle placeholder="제목을 입력해주세요."></EditorTitle>
-          <PostEditor></PostEditor>
+          <TitleTop />
+          <EditorTitle
+            placeholder="제목을 입력해주세요."
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+          ></EditorTitle>
+          <PostEditor setContent={setContent}></PostEditor>
           <ButtonBox>
-            <button type="button">확인</button>
+            <button type="button" onClick={handleSubmit}>
+              확인
+            </button>
             <button type="button">취소</button>
           </ButtonBox>
         </EditorBox>
@@ -55,29 +85,6 @@ const EditorBox = styled.div`
   padding-bottom: 20px;
 `;
 
-const EditorTop = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 20px;
-  border-bottom: 3px solid black;
-`;
-
-const GoBack = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 120px;
-  height: 40px;
-  padding: 5px 15px;
-  border: 1px solid lightgray;
-  font-weight: bold;
-  cursor: pointer;
-  i {
-    margin-right: 5px;
-  }
-`;
-
 const EditorTitle = styled.input`
   width: 100%;
   height: 60px;
@@ -98,6 +105,7 @@ const ButtonBox = styled.div`
     width: 165px;
     height: 50px;
     font-size: 16px;
+    cursor: pointer;
     :first-child {
       background-color: #333;
       color: #fff;

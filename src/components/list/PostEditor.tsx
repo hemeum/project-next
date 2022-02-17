@@ -4,11 +4,11 @@ import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 //toast-ui 3.0이 출시되면서 codemirror 의존성 제거됌.
 
-function PostEditor() {
+function PostEditor({ setContent }: { setContent: any }) {
   const editorRef: any = useRef();
 
   const handleEdit = () => {
-    console.log(editorRef.current.getInstance().getMarkdown());
+    setContent(editorRef.current.getInstance().getMarkdown());
   };
   return (
     <Editor
