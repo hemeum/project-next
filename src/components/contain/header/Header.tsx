@@ -8,6 +8,7 @@ import { throttle } from "lodash";
 
 function Header() {
   const [gameBt, setGameBt] = useState(false);
+  const [isHover, setIsHover] = useState(false);
 
   const itemsRef1 = useRef<HTMLUListElement>(null);
   const itemsRef2 = useRef<HTMLUListElement>(null);
@@ -85,7 +86,6 @@ function Header() {
 
   /* scroll 관련 */
   const [scroll, setScroll] = useState(0);
-
   const handleScroll = throttle(() => {
     if (window.scrollY < 100) {
       setScroll(window.scrollY);
@@ -105,12 +105,22 @@ function Header() {
     // css 우선순위에 의해서 styled-compo로 적용하는 스타일과 ref로 적용하는 스타일이 겹친다면 ref는 인라인 스타일로 class로 작성한 스타일보다 우선순위가 높다. 그러니 하나의 스타일을 바꿀 경우엔 통일한 방식으로 변경해주자.
     if (scroll > 0) {
       headerRef.current.style.backgroundColor = "black";
-    } else if (scroll === 0) {
+      headerRef.current.style.transition = "background-color 0.2s ease";
+    } else if (scroll === 0 && isHover !== true) {
+      // 이 부분이 문제군
       headerRef.current.style.backgroundColor = "transparent";
+      headerRef.current.style.transition = "background-color 0.2s ease";
+      if (pracRef.current !== null) {
+        pracRef.current.style.height = "0px";
+        pracRef.current.style.opacity = "0";
+        pracRef.current.style.visibility = "hidden";
+        pracRef.current.style.transition =
+          "height 0.2s ease, opacity 0.2s ease, visibility 0.2s ease";
+      }
     }
   }
-
   /* 마우스 hover and leave 관련 */
+
   const handleHover = () => {
     if (pracRef.current !== null) {
       pracRef.current.style.height = "250px";
@@ -121,12 +131,10 @@ function Header() {
     }
 
     if (headerRef.current !== null) {
-      if (headerRef.current.style.backgroundColor === "transparent") {
-        headerRef.current.style.backgroundColor = "black";
-      }
       headerRef.current.style.backgroundColor = "black";
       headerRef.current.style.transition = "background-color 0.2s ease";
     }
+    setIsHover(true);
   };
 
   const handleLeave = () => {
@@ -145,6 +153,7 @@ function Header() {
       }
       headerRef.current.style.transition = "background-color 0.2s ease";
     }
+    setIsHover(false);
   };
 
   const handleHoverBorder = (e: { currentTarget: { parentNode: any } }) => {
@@ -194,11 +203,18 @@ function Header() {
       id: 4,
       menu: "커뮤니티",
       items: [
-        { id: 16, item: "자유게시판", url: "/community/freelist" },
+        {
+          id: 16,
+          item: "자유게시판",
+          url: {
+            pathname: "/community/freelist",
+            query: { ctg: "자유게시판" },
+          },
+        },
         { id: 17, item: "공지사항", url: "/" },
         { id: 18, item: "공지사항", url: "/" },
       ],
-      url: "/",
+      url: "/community/freelist",
     },
     {
       id: 5,
@@ -222,15 +238,27 @@ function Header() {
     },
   ];
 
+  const handleHeaderBg = () => {
+    if (headerRef.current !== null) {
+      headerRef.current.style.backgroundColor = "black";
+    }
+  };
+
   const menus = menuList.map((m, i) => {
     return (
       <MenuList
         key={m.id}
-        onMouseEnter={handleHoverBorder}
+        onMouseEnter={(e) => {
+          handleHoverBorder(e);
+          handleHover();
+        }}
         onMouseLeave={handleLeaveBorder}
+        onClick={handleHeaderBg}
       >
         <Link href={m.url}>
-          <a ref={menuRefArr[i]}>{m.menu}</a>
+          <a onClick={handleHeaderBg} ref={menuRefArr[i]}>
+            {m.menu}
+          </a>
         </Link>
       </MenuList>
     );
@@ -239,9 +267,9 @@ function Header() {
   const menuListItems = menuList.map((menu, i) => {
     const items = menu.items.map((item) => {
       return (
-        <MenuListItem key={item.id}>
+        <MenuListItem key={item.id} onClick={handleHeaderBg}>
           <Link href={item.url}>
-            <a>{item.item}</a>
+            <a onClick={handleHeaderBg}>{item.item}</a>
           </Link>
         </MenuListItem>
       );
@@ -370,11 +398,6 @@ const HeaderC = styled.header<{ ref: any; scroll: number }>`
   height: 80px;
   z-index: 9999;
   transition: backgorund-color 0.2 ease;
-  ${({ scroll }) => {
-    return scroll > 0
-      ? "background-color:black"
-      : "background-color:transparent";
-  }};
 `;
 
 const HeaderBottomLine = styled.div`
