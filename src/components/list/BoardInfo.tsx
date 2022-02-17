@@ -1,34 +1,59 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
-export default function BoardInfo() {
+
+export interface InfoType {
+  key?: number;
+  title: string;
+  content?: string;
+  nickname: string;
+  heart: number;
+  view: number;
+  reply: number;
+  date: string;
+  id: number;
+}
+
+export default function BoardInfo({
+  title,
+  content,
+  nickname,
+  heart,
+  view,
+  reply,
+  date,
+  id,
+}: InfoType) {
   const router = useRouter();
   return (
     <Info
       onClick={() => {
         router.push(
-          "/community/freelist/view/[id]",
-          "/community/freelist/view/1",
+          {
+            pathname: "/community/freelist/view/[id]",
+            query: { ctg: router.query.ctg, postId: id },
+          },
+          `/community/freelist/view/${id}`,
         );
       }}
     >
       <p>
-        <span>글작성한것</span>
-        <span>(댓글)</span>
+        <span>{title}</span>
+        <span>({reply})</span>
         <span>N</span>
       </p>
       <div>
         <img src="/img/logo-loa.png" alt="프로필 이미지" />
-        <p>sgasgasgdasdgasdg</p>
+        <p>{nickname}</p>
       </div>
       <div>
         <i aria-hidden className="fa-solid fa-heart"></i>
-        <p>0</p>
+        <p>{heart}</p>
       </div>
       <div>
         <i aria-hidden className="fa-solid fa-eye"></i>
-        <p>0</p>
+        <p>{view}</p>
       </div>
-      <p>날짜</p>
+      <p>{date}</p>
     </Info>
   );
 }

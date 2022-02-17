@@ -1,17 +1,68 @@
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import moment from "moment";
 
 import BoardControll from "./BoardControll";
 import BoardInfo from "./BoardInfo";
+import { InfoType } from "./BoardInfo";
 
 export default function BoardList() {
-  const [select, setSelect] = useState("최신순");
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  const router: any = useRouter();
 
-  const lists = arr.map((item) => {
-    return <BoardInfo key={item}></BoardInfo>;
+  const { isLogin } = useSelector((state: any) => {
+    return state.authReducer;
   });
+  const [select, setSelect] = useState("최신순");
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    axios.post("/post/list", {}).then((res) => {
+      setList(res.data);
+    });
+  }, []);
+
+  const lists = [...list].reverse().map((item: InfoType) => {
+    // reverse()는 state 원본 배열을 뒤집기 때문에 꼭 복제해서 써야한다.
+    const date = moment(item.date).format("YYYY.MM.DD");
+    return (
+      <BoardInfo
+        key={item.id}
+        id={item.id}
+        title={item.title}
+        content={item.content}
+        nickname={item.nickname}
+        date={date}
+        heart={item.heart}
+        view={item.view}
+        reply={item.reply}
+      ></BoardInfo>
+    );
+  });
+
+  const handleWrite = () => {
+    if (isLogin) {
+      Router.push({
+        pathname: "/community/freewrite",
+        query: { ctg: router.query.ctg },
+      });
+    } else {
+      const yesLogin = confirm("로그인이 필요합니다.");
+      if (yesLogin) {
+        Router.push("/user/login");
+      } else {
+        return;
+      }
+    }
+  };
+
+  const handleCtg = () => {
+    if (router.pathname === "/community/freelist") {
+      return "자유게시판";
+    }
+  };
 
   return (
     <>
@@ -64,16 +115,11 @@ export default function BoardList() {
       </ListNews>
       <ul>{lists}</ul>
       <ButtonWrap>
-        <WriteButton
-          type="button"
-          onClick={() => {
-            Router.push("/community/freewrite");
-          }}
-        >
+        <WriteButton type="button" onClick={handleWrite}>
           글쓰기
         </WriteButton>
       </ButtonWrap>
-      <BoardControll />
+      <BoardControll setList={setList} ctg={handleCtg()} />
     </>
   );
 }
