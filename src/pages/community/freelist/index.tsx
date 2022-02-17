@@ -1,5 +1,5 @@
-import WrapList from "src/components/list/WrapList";
+import List from "src/components/list/List";
 
 export default function PageFreeList() {
-  return <WrapList></WrapList>;
+  return <List></List>;
 }

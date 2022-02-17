@@ -1,11 +1,14 @@
 import styled from "styled-components";
 import { SetStateAction, useState } from "react";
+import { useRouter } from "next/router";
 
 import Footer from "../contain/footer/Footer";
 import BoardList from "./BoardList";
-import ListTop from "./ListTop";
+import PageTop from "./PageTop";
 
-export default function WrapList() {
+export default function List() {
+  const router = useRouter();
+
   const [isSelect, setIsSelect] = useState(false);
   const [selectSearch, setSelectSearch] = useState("제목");
 
@@ -30,11 +33,11 @@ export default function WrapList() {
           }
         }}
       >
-        <ListTop></ListTop>
+        <PageTop></PageTop>
 
         <ListMain>
           <MainTop isSelect={isSelect}>
-            <h2>자유 게시판</h2>
+            <h2>{router.query.ctg}</h2>
             <div>
               <div>
                 <div onClick={clickSelectedSearch}>{selectSearch}</div>

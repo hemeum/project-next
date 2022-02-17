@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Header from "../contain/header/Header";
 
-export default function ListTop() {
+export default function PageTop() {
   return (
     <>
       <Header></Header>
