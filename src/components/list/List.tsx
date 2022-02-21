@@ -1,14 +1,11 @@
 import styled from "styled-components";
 import { SetStateAction, useState } from "react";
-import { useRouter } from "next/router";
 
 import Footer from "../contain/footer/Footer";
 import BoardList from "./BoardList";
 import PageTop from "./PageTop";
 
-export default function List() {
-  const router = useRouter();
-
+export default function List({ ctg }: any) {
   const [isSelect, setIsSelect] = useState(false);
   const [selectSearch, setSelectSearch] = useState("제목");
 
@@ -37,7 +34,7 @@ export default function List() {
 
         <ListMain>
           <MainTop isSelect={isSelect}>
-            <h2>{router.query.ctg}</h2>
+            <h2>{ctg}</h2>
             <div>
               <div>
                 <div onClick={clickSelectedSearch}>{selectSearch}</div>
@@ -60,7 +57,7 @@ export default function List() {
             </div>
           </MainTop>
           <MainCon>
-            <BoardList />
+            <BoardList ctg={ctg} />
           </MainCon>
         </ListMain>
       </Wrap>
@@ -72,7 +69,7 @@ export default function List() {
 const Wrap = styled.div`
   position: relative;
   min-width: 1300px;
-  height: 1920px;
+  height: 1720px;
 `;
 
 const ListMain = styled.div`
