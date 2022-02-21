@@ -1,21 +1,37 @@
 import styled from "styled-components";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, SetStateAction } from "react";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import axios from "axios";
+import moment from "moment";
+import { debounce } from "lodash";
 
 import PageTop from "./PageTop";
 import Footer from "./../contain/footer/Footer";
 import TitleTop from "./TitleTop";
 import BoardList from "./BoardList";
 import Reply from "./Reply";
-import axios from "axios";
-import moment from "moment";
 
 export default function Detail() {
+  const isLogin = useSelector((state: any) => {
+    return state.authReducer.isLogin;
+  });
+  const nickname = useSelector((state: any) => {
+    return state.authReducer.nickname;
+  });
+
   const router = useRouter();
-  const postId = router.query.postId;
+  const ctg = router.query.ctg;
+  const postId = router.query.id;
+  console.log(ctg);
 
-  const conRef: any = useRef();
+  const mainRef: any = useRef();
+  const replyRef: any = useRef();
 
+  const [heartLeng, setHeartLeng] = useState(0);
+  const [isHeart, setIsHeart] = useState(false);
+  const [reply, setReply] = useState("");
+  const [replyLength, setReplyLength] = useState(0);
   const [height, setHeight] = useState(200);
   const [detail, setDetail] = useState({
     title: "",
@@ -28,44 +44,183 @@ export default function Detail() {
   });
 
   useEffect(() => {
-    setHeight(conRef.current.clientHeight);
-  }, [height]);
+    setHeight(mainRef.current.clientHeight);
+  }, [detail, postId, height, replyLength]);
 
   useEffect(() => {
     axios.post("/post/detail", { postId: postId }).then((res) => {
-      const date = moment(res.data.date).format("YYYY.MM.DD");
+      const date = moment(res.data.date).format("YYYY년 M월 D일 HH:mm");
       res.data.date = date;
       setDetail(res.data);
+      setReplyLength(res.data.reply);
+      setHeartLeng(res.data.heart);
     });
-  }, [postId]);
+  }, [postId, height, heartLeng]);
+
+  const submitReply = debounce(() => {
+    if (isLogin) {
+      axios
+        .post("/post/add/reply", {
+          reply: reply,
+          nickname: nickname,
+          postId: postId,
+        })
+        .then(() => {
+          setReplyLength(replyLength + 1);
+          setReply("");
+          setHeight(height + 63);
+        });
+    } else {
+      const yesLogin = confirm("로그인이 필요합니다.");
+      if (yesLogin) {
+        router.push("/user/login");
+      } else {
+        return;
+      }
+    }
+  }, 500);
+
+  const handleReply = (e: any) => {
+    if (isLogin) {
+      if (e.target.value.length > 200) {
+        return;
+      } else {
+        setReply(e.target.value);
+      }
+    } else {
+      const yesLogin = confirm("로그인이 필요합니다.");
+      if (yesLogin) {
+        router.push("/user/login");
+      } else {
+        return;
+      }
+    }
+  };
+
+  const handleHeart = debounce(() => {
+    if (isLogin) {
+      if (!isHeart) {
+        axios
+          .post("/post/add/heart", { postId: postId, nickname: nickname })
+          .then((res) => {
+            setIsHeart(res.data.isHeart);
+            setHeartLeng(heartLeng + 1);
+          });
+      } else {
+        axios
+          .post("/post/delete/heart", { postId: postId, nickname: nickname })
+          .then((res) => {
+            setIsHeart(res.data.isHeart);
+            setHeartLeng(heartLeng - 1);
+          });
+      }
+    } else {
+      const yesLogin = confirm("로그인이 필요합니다.");
+      if (yesLogin) {
+        router.push("/user/login");
+      } else {
+        return;
+      }
+    }
+  }, 500);
+
+  const handlePostDelete = () => {
+    const yesDelete = confirm("정말 삭제하시겠습니까?");
+    if (yesDelete) {
+      axios.post("/post/delete", { postId: postId }).then(() => {
+        router.push({ pathname: "/community/freelist", query: { ctg: ctg } });
+      });
+    } else {
+      return;
+    }
+  };
+
+  const handlePostEdit = () => {
+    const yesEdit = confirm("수정하시겠습니까?");
+    if (yesEdit) {
+      router.push({
+        pathname: "/community/freewrite",
+        query: {
+          ctg: ctg,
+          title: detail.title,
+          value: detail.content,
+          postId: postId,
+        },
+      });
+    } else {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    axios
+      .post("/post/heart", { postId: postId, nickname: nickname })
+      .then((res) => {
+        setIsHeart(res.data.isHeart);
+      });
+  }, [isHeart, postId]);
 
   return (
     <>
       <Wrap height={height}>
         <PageTop></PageTop>
-        <DetailMain>
+        <DetailMain ref={mainRef}>
           <TitleTop></TitleTop>
-          <Content ref={conRef}>
+          <Content>
             <Text>
               <h3>{detail.title}</h3>
               <p>{detail.date}</p>
               <p>{detail.content}</p>
-              <div>
-                <i></i>
-                <span>{detail.heart}</span>
-              </div>
+
+              {detail.nickname === nickname ? (
+                <ButtonBox>
+                  <button type="button" onClick={handlePostEdit}>
+                    수정
+                  </button>
+                  <span>|</span>
+                  <button type="button" onClick={handlePostDelete}>
+                    삭제
+                  </button>
+                </ButtonBox>
+              ) : (
+                <HeartBox>
+                  <I
+                    aria-hidden
+                    className="fa-solid fa-heart"
+                    onClick={handleHeart}
+                    isHeart={isHeart}
+                  ></I>
+                  <span>{detail.heart}</span>
+                </HeartBox>
+              )}
+
               <div>
                 <h3>
-                  댓글<span>{detail.reply}</span>
+                  댓글<span>{replyLength}</span>
                 </h3>
-                <textarea placeholder="저작권 침해는 제한됩니다."></textarea>
+                <textarea
+                  placeholder="저작권 침해는 제한됩니다."
+                  value={reply}
+                  onChange={handleReply}
+                  ref={replyRef}
+                ></textarea>
                 <div>
-                  <p>0 / 200</p>
-                  <button type="button">등록</button>
+                  <p>{reply.length === 0 ? 0 : reply.length} / 200</p>
+                  <button type="button" onClick={submitReply}>
+                    등록
+                  </button>
                 </div>
-                <ul>
-                  <Reply></Reply>
-                </ul>
+                {replyLength === 0 ? undefined : (
+                  <ul>
+                    <Reply
+                      postId={postId}
+                      replyLength={replyLength}
+                      setReplyLength={setReplyLength}
+                      height={height}
+                      setHeight={setHeight}
+                    ></Reply>
+                  </ul>
+                )}
               </div>
             </Text>
             <Info>
@@ -84,7 +239,7 @@ export default function Detail() {
               </div>
               <div>
                 <p>
-                  댓글 <span>{detail.reply}</span>
+                  댓글 <span>{replyLength}</span>
                 </p>
                 <p>
                   좋아요 <span>{detail.heart}</span>
@@ -96,7 +251,7 @@ export default function Detail() {
               <button type="button">글쓰기</button>
             </Info>
           </Content>
-          <BoardList></BoardList>
+          <BoardList ctg={ctg}></BoardList>
         </DetailMain>
       </Wrap>
       <Footer></Footer>
@@ -108,7 +263,7 @@ const Wrap = styled.div<{ height: number }>`
   position: relative;
   min-width: 1300px;
   height: ${({ height }) => {
-    return `${height + 2000}px`;
+    return `${height + 480}px`;
   }};
 `;
 
@@ -147,14 +302,6 @@ const Text = styled.div`
   }
   > div {
     :nth-of-type(1) {
-      width: 110px;
-      height: 45px;
-      margin: 0 auto 50px;
-      border: 1px solid lightgray;
-      border-radius: 30px;
-      font-size: 18px;
-      text-align: center;
-      line-height: 45px;
     }
     :nth-of-type(2) {
       padding-top: 30px;
@@ -167,7 +314,7 @@ const Text = styled.div`
         margin-left: 10px;
         font-size: 25px;
       }
-      textarea {
+      > textarea {
         width: 980px;
         height: 100px;
         margin-right: 50px;
@@ -264,5 +411,45 @@ const Info = styled.div`
     }
     transition: all 0.5s;
     cursor: pointer;
+  }
+`;
+
+const I = styled.i<{ isHeart: boolean }>`
+  ${({ isHeart }) => {
+    return isHeart ? "color:red" : "color:black";
+  }};
+  margin-right: 5px;
+  transition: all 0.5s;
+  cursor: pointer;
+`;
+
+const HeartBox = styled.div`
+  width: 110px;
+  height: 45px;
+  margin: 0 auto 50px;
+  border: 1px solid lightgray;
+  border-radius: 30px;
+  font-size: 18px;
+  text-align: center;
+  line-height: 45px;
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 50px;
+  margin-right: 50px;
+  button {
+    color: gray;
+    font-weight: bold;
+    :hover {
+      color: black;
+    }
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  span {
+    color: gray;
+    margin: 0 10px;
   }
 `;

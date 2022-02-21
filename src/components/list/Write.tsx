@@ -4,15 +4,22 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { debounce } from "lodash";
 
 import PageTop from "./PageTop";
 import Footer from "../contain/footer/Footer";
 import TitleTop from "./TitleTop";
+import { Router } from "express";
 
 const PostEditor = dynamic(() => import("./PostEditor"), { ssr: false });
 
 export default function Write() {
   const router: any = useRouter();
+  const ctg = router.query.ctg;
+  const prevTitle = router.query.title;
+  const prevContent = router.query.value;
+  const prevPostId = router.query.postId;
+
   const { nickname } = useSelector((state: any) => {
     return state.authReducer;
   });
@@ -20,28 +27,56 @@ export default function Write() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  useEffect(() => {
+    console.log(prevContent, prevTitle);
+    if (prevTitle && prevContent) {
+      setTitle(prevTitle);
+      setContent(prevContent); // toast-ui의 입력값이 content로 지정되어야 함.
+      // prevPostId로 수정해주기
+    }
+  }, []);
+
+  const handleSubmit = debounce((e: { preventDefault: () => void }) => {
     e.preventDefault();
-    axios
-      .post("/post/add", {
-        nickname: nickname,
-        category: router.query.ctg,
-        title: title,
-        content: content,
-      })
-      .then((res) => {
-        if (router.query.ctg === "자유게시판") {
-          console.log(res.data.postId);
-          router.push(
-            {
-              pathname: `/community/freelist/view/[id]`,
-              query: { ctg: router.query.ctg, postId: res.data.postId },
-            },
-            `/community/freelist/view/${res.data.postId}`,
-          );
-        }
-      });
-  };
+    if (prevTitle && prevContent) {
+      axios
+        .post("/post/edit", {
+          postId: prevPostId,
+          title: title,
+          content: content,
+        })
+        .then((res) => {
+          if (ctg === "자유게시판") {
+            router.push(
+              {
+                pathname: `/community/freelist/view/[id]`,
+                query: { ctg: ctg, postId: res.data.postId },
+              },
+              `/community/freelist/view/${res.data.postId}?ctg=${ctg}`,
+            );
+          }
+        });
+    } else {
+      axios
+        .post("/post/add", {
+          nickname: nickname,
+          category: ctg,
+          title: title,
+          content: content,
+        })
+        .then((res) => {
+          if (ctg === "자유게시판") {
+            router.push(
+              {
+                pathname: `/community/freelist/view/[id]`,
+                query: { ctg: ctg, postId: res.data.postId },
+              },
+              `/community/freelist/view/${res.data.postId}?ctg=${ctg}`,
+            );
+          }
+        });
+    }
+  }, 500);
 
   return (
     <>
@@ -54,13 +89,24 @@ export default function Write() {
             onChange={(e) => {
               setTitle(e.target.value);
             }}
+            value={title}
           ></EditorTitle>
-          <PostEditor setContent={setContent}></PostEditor>
+          <PostEditor setContent={setContent} content={content}></PostEditor>
           <ButtonBox>
             <button type="button" onClick={handleSubmit}>
               확인
             </button>
-            <button type="button">취소</button>
+            <button
+              type="button"
+              onClick={() => {
+                router.push({
+                  pathname: "/community/freelist",
+                  query: { ctg: ctg },
+                });
+              }}
+            >
+              취소
+            </button>
           </ButtonBox>
         </EditorBox>
       </Wrap>
