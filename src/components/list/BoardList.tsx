@@ -9,20 +9,19 @@ import BoardControll from "./BoardControll";
 import BoardInfo from "./BoardInfo";
 import { InfoType } from "./BoardInfo";
 
-export default function BoardList() {
-  const router: any = useRouter();
-
+export default function BoardList({ ctg }: any) {
   const { isLogin } = useSelector((state: any) => {
     return state.authReducer;
   });
   const [select, setSelect] = useState("최신순");
-  const [list, setList] = useState([]);
+
+  const [list, setList] = useState<any>([]);
 
   useEffect(() => {
-    axios.post("/post/list", {}).then((res) => {
+    axios.post("/post/list", { category: ctg }).then((res) => {
       setList(res.data);
     });
-  }, []);
+  }, [ctg]);
 
   const lists = [...list].reverse().map((item: InfoType) => {
     // reverse()는 state 원본 배열을 뒤집기 때문에 꼭 복제해서 써야한다.
@@ -38,6 +37,7 @@ export default function BoardList() {
         heart={item.heart}
         view={item.view}
         reply={item.reply}
+        ctg={ctg}
       ></BoardInfo>
     );
   });
@@ -46,7 +46,7 @@ export default function BoardList() {
     if (isLogin) {
       Router.push({
         pathname: "/community/freewrite",
-        query: { ctg: router.query.ctg },
+        query: { ctg: ctg },
       });
     } else {
       const yesLogin = confirm("로그인이 필요합니다.");
@@ -55,12 +55,6 @@ export default function BoardList() {
       } else {
         return;
       }
-    }
-  };
-
-  const handleCtg = () => {
-    if (router.pathname === "/community/freelist") {
-      return "자유게시판";
     }
   };
 
@@ -119,7 +113,7 @@ export default function BoardList() {
           글쓰기
         </WriteButton>
       </ButtonWrap>
-      <BoardControll setList={setList} ctg={handleCtg()} />
+      <BoardControll setList={setList} ctg={ctg} />
     </>
   );
 }

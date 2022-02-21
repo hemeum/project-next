@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { getServerSideProps } from "src/pages";
 
 export interface InfoType {
   key?: number;
@@ -11,6 +12,7 @@ export interface InfoType {
   reply: number;
   date: string;
   id: number;
+  ctg: string;
 }
 
 export default function BoardInfo({
@@ -22,6 +24,7 @@ export default function BoardInfo({
   reply,
   date,
   id,
+  ctg,
 }: InfoType) {
   const router = useRouter();
   return (
@@ -30,9 +33,9 @@ export default function BoardInfo({
         router.push(
           {
             pathname: "/community/freelist/view/[id]",
-            query: { ctg: router.query.ctg, postId: id },
+            query: { ctg: ctg },
           },
-          `/community/freelist/view/${id}`,
+          `/community/freelist/view/${id}?ctg=${ctg}`,
         );
       }}
     >

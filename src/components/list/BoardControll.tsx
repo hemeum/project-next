@@ -22,7 +22,7 @@ export default function BoardControll({ setList, ctg }: any) {
       setPageNumbers(newArr.splice(0, 10));
       // active만 조정 - 생각해보자
     });
-  }, []);
+  }, [ctg]);
 
   const handleList = (e: any) => {
     const child = [...e.target.parentNode.childNodes];
@@ -35,7 +35,7 @@ export default function BoardControll({ setList, ctg }: any) {
     e.target.classList.replace("not-active", "active");
 
     const order = Number(e.target.innerText);
-    axios.post("/post/list", { order: order }).then((res) => {
+    axios.post("/post/list", { order: order, category: ctg }).then((res) => {
       setList(res.data);
     });
   };
@@ -58,7 +58,7 @@ export default function BoardControll({ setList, ctg }: any) {
       lastPRef.current.classList.replace("not-active", "active");
 
       const order = Number(lastPRef.current.innerText) - 1;
-      axios.post("/post/list", { order: order }).then((res) => {
+      axios.post("/post/list", { order: order, category: ctg }).then((res) => {
         setList(res.data);
       });
     }
@@ -88,7 +88,7 @@ export default function BoardControll({ setList, ctg }: any) {
       });
       firstPRef.current.classList.replace("not-active", "active");
       const order = Number(firstPRef.current.innerText) + 10;
-      axios.post("/post/list", { order: order }).then((res) => {
+      axios.post("/post/list", { order: order, category: ctg }).then((res) => {
         setList(res.data);
       });
     }

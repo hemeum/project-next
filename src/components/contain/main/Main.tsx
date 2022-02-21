@@ -33,6 +33,7 @@ function Main({ youtubeList }: { youtubeList: [] }) {
             <MainContents />
           </MainConBox>
         </div>
+
         <Footer></Footer>
       </div>
     </div>
