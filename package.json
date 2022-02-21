@@ -2,11 +2,10 @@
   "name": "pj-next",
   "private": true,
   "scripts": {
+    "dev": "nodemon --exec ts-node server.ts",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "server": "nodemon --exec ts-node server/server.ts",
-    "dev": "concurrently \"next dev\" \"npm run server\""
+    "lint": "next lint"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^32.0.0",
