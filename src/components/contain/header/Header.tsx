@@ -87,12 +87,11 @@ function Header() {
   /* scroll 관련 */
   const [scroll, setScroll] = useState(0);
   const handleScroll = throttle(() => {
-    if (window.scrollY < 100) {
-      setScroll(window.scrollY);
-    }
-  }, 200);
+    setScroll(window.scrollY);
+  }, 300);
 
   useEffect(() => {
+    // scroll이 첫 window.scrollY로 바뀌게
     // throttle은 debounce와 달리 이벤트가 바로 실행되었다가 몇초 간격으로 다시 실행해주는 것이기 때문에, 빈배열에 scroll을 넣어주게 되면, 연속적으로 계속 실행하는 것과 같다. 따라서 비워주자.
     setScroll(window.scrollY);
     window.addEventListener("scroll", handleScroll);
@@ -101,24 +100,28 @@ function Header() {
     };
   }, []);
 
-  if (headerRef.current !== null) {
-    // css 우선순위에 의해서 styled-compo로 적용하는 스타일과 ref로 적용하는 스타일이 겹친다면 ref는 인라인 스타일로 class로 작성한 스타일보다 우선순위가 높다. 그러니 하나의 스타일을 바꿀 경우엔 통일한 방식으로 변경해주자.
-    if (scroll > 0) {
-      headerRef.current.style.backgroundColor = "black";
-      headerRef.current.style.transition = "background-color 0.2s ease";
-    } else if (scroll === 0 && isHover !== true) {
-      // 이 부분이 문제군
-      headerRef.current.style.backgroundColor = "transparent";
-      headerRef.current.style.transition = "background-color 0.2s ease";
-      if (pracRef.current !== null) {
-        pracRef.current.style.height = "0px";
-        pracRef.current.style.opacity = "0";
-        pracRef.current.style.visibility = "hidden";
-        pracRef.current.style.transition =
-          "height 0.2s ease, opacity 0.2s ease, visibility 0.2s ease";
+  useEffect(() => {
+    // scroll에 따른 스타일
+    if (headerRef.current !== null) {
+      // css 우선순위에 의해서 styled-compo로 적용하는 스타일과 ref로 적용하는 스타일이 겹친다면 ref는 인라인 스타일로 class로 작성한 스타일보다 우선순위가 높다. 그러니 하나의 스타일을 바꿀 경우엔 통일한 방식으로 변경해주자.
+      if (scroll > 0) {
+        headerRef.current.style.backgroundColor = "black";
+        headerRef.current.style.transition = "background-color 0.2s ease";
+      } else if (scroll === 0 && isHover !== true) {
+        // 이 부분이 문제군
+        headerRef.current.style.backgroundColor = "transparent";
+        headerRef.current.style.transition = "background-color 0.2s ease";
+        if (pracRef.current !== null) {
+          pracRef.current.style.height = "0px";
+          pracRef.current.style.opacity = "0";
+          pracRef.current.style.visibility = "hidden";
+          pracRef.current.style.transition =
+            "height 0.2s ease, opacity 0.2s ease, visibility 0.2s ease";
+        }
       }
     }
-  }
+  }, [scroll]);
+
   /* 마우스 hover and leave 관련 */
 
   const handleHover = () => {
@@ -174,8 +177,8 @@ function Header() {
       menu: "새소식",
       items: [
         { id: 7, item: "공지사항", url: "/" },
-        { id: 8, item: "공지사항", url: "/" },
-        { id: 9, item: "공지사항", url: "/" },
+        { id: 8, item: "업데이트", url: "/" },
+        { id: 9, item: "이벤트", url: "/" },
       ],
       url: "/",
     },
@@ -183,9 +186,9 @@ function Header() {
       id: 2,
       menu: "게임정보",
       items: [
-        { id: 10, item: "공지사항", url: "/" },
-        { id: 11, item: "공지사항", url: "/" },
-        { id: 12, item: "공지사항", url: "/" },
+        { id: 10, item: "전투정보실", url: "/" },
+        { id: 11, item: "세계관", url: "/" },
+        { id: 12, item: "클래스", url: "/" },
       ],
       url: "/",
     },
@@ -193,9 +196,9 @@ function Header() {
       id: 3,
       menu: "가이드",
       items: [
-        { id: 13, item: "공지사항", url: "/" },
-        { id: 14, item: "공지사항", url: "/" },
-        { id: 15, item: "공지사항", url: "/" },
+        { id: 13, item: "게임 가이드", url: "/" },
+        { id: 14, item: "아이템 사전", url: "/" },
+        { id: 15, item: "콘텐츠", url: "/" },
       ],
       url: "/",
     },
@@ -211,8 +214,8 @@ function Header() {
             query: { ctg: "자유게시판" },
           },
         },
-        { id: 17, item: "공지사항", url: "/" },
-        { id: 18, item: "공지사항", url: "/" },
+        { id: 17, item: "직업게시판", url: "/" },
+        { id: 18, item: "길드모집", url: "/" },
       ],
       url: "/community/freelist",
     },
@@ -220,9 +223,9 @@ function Header() {
       id: 5,
       menu: "미디어",
       items: [
-        { id: 19, item: "공지사항", url: "/" },
-        { id: 20, item: "공지사항", url: "/" },
-        { id: 21, item: "공지사항", url: "/" },
+        { id: 19, item: "로아 상영관", url: "/" },
+        { id: 20, item: "공모전", url: "/" },
+        { id: 21, item: "OST", url: "/" },
       ],
       url: "/",
     },
@@ -230,9 +233,9 @@ function Header() {
       id: 6,
       menu: "고객센터",
       items: [
-        { id: 22, item: "공지사항", url: "/" },
-        { id: 23, item: "공지사항", url: "/" },
-        { id: 24, item: "공지사항", url: "/" },
+        { id: 22, item: "FAQ", url: "/" },
+        { id: 23, item: "신고센터", url: "/" },
+        { id: 24, item: "보안서비스", url: "/" },
       ],
       url: "/",
     },
@@ -292,13 +295,15 @@ function Header() {
         <InnerL>
           <Logo size={size}>
             <h1>
-              <a>
-                {size < 1900 ? (
-                  <img src="/img/logo-loa.png" alt="로스트아크 로고"></img>
-                ) : (
-                  <img src="/img/logo-loa2.png" alt="로스트아크 로고"></img>
-                )}
-              </a>
+              <Link href="/">
+                <a>
+                  {size < 1900 ? (
+                    <img src="/img/logo-loa.png" alt="로스트아크 로고"></img>
+                  ) : (
+                    <img src="/img/logo-loa2.png" alt="로스트아크 로고"></img>
+                  )}
+                </a>
+              </Link>
             </h1>
           </Logo>
           <Nav>
