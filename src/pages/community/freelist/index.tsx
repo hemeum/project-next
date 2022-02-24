@@ -13,8 +13,6 @@ export default function PageFreeList() {
     // 브라우저에서도 서버와 마찬가지로 실행이 되고, 브라우저에서는 제대로 동작하기 때문에 브라우저 콘솔에 찍힘
     // 브라우저가 서버에서 만든 프리렌더 HTML을 그대로 다운받더라도 콘솔까지 완전 똑같이 다운받지 않음.
     // 콘솔은 각각의 그것.
-    let test = 1;
-    console.log(test, "freelist page-index.tsx");
   }, []);
   return <List ctg={router.query.ctg}></List>;
 }
