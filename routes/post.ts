@@ -40,35 +40,38 @@ export default (connection: any) => {
   });
 
   router.post("/list", (req, res) => {
-    console.log(req.body.order);
-    if (req.body.order !== 1 && req.body.order !== undefined) {
-      connection.query(
-        `select * from post where category = ? order by date desc limit ${
-          10 * req.body.order
-        } `,
-        [req.body.category],
-        (err: any, rows: any) => {
-          if (err) {
-            console.log("DB list * order 가져오기 err");
+    connection.query(
+      `select * from post where category = ? order by id desc limit ${
+        10 * req.body.pageNumber
+      } `,
+      [req.body.category],
+      (err: any, rows: any) => {
+        if (err) {
+          console.log("DB list * pageNumber 가져오기 err");
+        } else {
+          if (req.body.pageNumber === 1) {
+            res.send({ list: rows });
           } else {
-            res.send(rows.reverse().splice(0, 10));
+            res.send({
+              list: rows.reverse().splice(0, 10).reverse(),
+            });
           }
-        },
-      );
-    } else {
-      connection.query(
-        "select * from post where category = ? order by date desc limit 10 ",
-        [req.body.category],
-        (err: any, rows: any) => {
-          if (err) {
-            console.log("DB list 가져오기 err");
-          } else {
-            res.send(rows);
-          }
-        },
-      );
-    }
+        }
+      },
+    );
   });
+
+  /*const orderPost = rows;
+            const spliceOrderPost = [...rows].reverse().splice(0, 10);
+            let splicePostIndexs = [];
+            for (let i = 0; i < spliceOrderPost.length; i++) {
+              for (let j = 0; j < orderPost.length; j++) {
+                if (spliceOrderPost[i] === orderPost[j]) {
+                  splicePostIndexs.push(j);
+                }
+              }
+            }
+            console.log(splicePostIndexs.reverse()); // 잘라낸 post의 인덱스를 담은 배열*/
 
   router.post("/detail", (req, res) => {
     connection.query(
@@ -213,6 +216,20 @@ export default (connection: any) => {
           } else {
             res.send({ isHeart: false });
           }
+        }
+      },
+    );
+  });
+
+  router.post("/add/view", (req, res) => {
+    connection.query(
+      "update post set view = view + 1 where id =?",
+      [req.body.postId],
+      (err: any) => {
+        if (err) {
+          console.log("db err 뷰 증가");
+        } else {
+          res.send({ postId: req.body.postId });
         }
       },
     );

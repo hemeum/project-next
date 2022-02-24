@@ -23,11 +23,12 @@ export default function Detail() {
   const router = useRouter();
   const ctg = router.query.ctg;
   const postId = router.query.id;
-  console.log(ctg);
+  const page = router.query.page;
 
   const mainRef: any = useRef();
   const replyRef: any = useRef();
 
+  const [detailToggle, setDetailToggle] = useState(false); // detail 새로 받아오기 위한 토글
   const [heartLeng, setHeartLeng] = useState(0);
   const [isHeart, setIsHeart] = useState(false);
   const [reply, setReply] = useState("");
@@ -55,7 +56,7 @@ export default function Detail() {
       setReplyLength(res.data.reply);
       setHeartLeng(res.data.heart);
     });
-  }, [postId, height, heartLeng]);
+  }, [postId, height, heartLeng, detailToggle]);
 
   const submitReply = debounce(() => {
     if (isLogin) {
@@ -251,7 +252,12 @@ export default function Detail() {
               <button type="button">글쓰기</button>
             </Info>
           </Content>
-          <BoardList ctg={ctg}></BoardList>
+          <BoardList
+            ctg={ctg}
+            detailToggle={detailToggle}
+            setDetailToggle={setDetailToggle}
+            page={page}
+          ></BoardList>
         </DetailMain>
       </Wrap>
       <Footer></Footer>

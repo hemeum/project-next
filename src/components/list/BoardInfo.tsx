@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { getServerSideProps } from "src/pages";
+import axios from "axios";
 
 export interface InfoType {
   key?: number;
@@ -13,6 +13,11 @@ export interface InfoType {
   date: string;
   id: number;
   ctg: string;
+  listToggle: boolean;
+  setListToggle: any;
+  detailToggle: boolean;
+  setDetailToggle: any;
+  isPageNumber: number;
 }
 
 export default function BoardInfo({
@@ -25,18 +30,29 @@ export default function BoardInfo({
   date,
   id,
   ctg,
+  listToggle,
+  setListToggle,
+  detailToggle,
+  setDetailToggle,
+  isPageNumber,
 }: InfoType) {
   const router = useRouter();
+
   return (
     <Info
       onClick={() => {
-        router.push(
-          {
-            pathname: "/community/freelist/view/[id]",
-            query: { ctg: ctg },
-          },
-          `/community/freelist/view/${id}?ctg=${ctg}`,
-        );
+        // 조회수 1 증가 후 이동
+        axios.post("/post/add/view", { postId: id }).then((res) => {
+          //setListToggle(!listToggle);
+          //setDetailToggle(!detailToggle);
+          router.push(
+            {
+              pathname: "/community/freelist/view/[id]",
+              query: { ctg: ctg, page: isPageNumber },
+            },
+            `/community/freelist/view/${res.data.postId}?ctg=${ctg}&page=${isPageNumber}`,
+          );
+        });
       }}
     >
       <p>

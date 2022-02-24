@@ -19,7 +19,7 @@ export default function Reply({
   const [replys, setReplys] = useState([]);
   const [isEdit, setIsEdit] = useState<boolean[]>([]); // 수정 클릭하면 true
   const [editedReply, setEditedReply] = useState("");
-  const [yesEdit, setYesEdit] = useState(false); // toggle
+  const [editToggle, setEditToggle] = useState(false); // toggle
 
   useEffect(() => {
     axios.post("/post/reply", { postId: postId }).then((res) => {
@@ -30,7 +30,7 @@ export default function Reply({
       });
       setIsEdit(isEditArr);
     });
-  }, [replyLength, postId, height, yesEdit]);
+  }, [replyLength, postId, height, editToggle]);
 
   const handleEdit = (reply: string, index: number) => {
     const newIsEdit = isEdit.map(() => {
@@ -56,21 +56,16 @@ export default function Reply({
           return false;
         });
         setIsEdit(newIsEdit);
-        setYesEdit(!yesEdit);
+        setEditToggle(!editToggle);
       });
   }, 500);
 
   const handleDelete = (replyId: number) => {
     const yesDelete = confirm("정말 삭제하시겠습니까?");
     if (yesDelete) {
-      axios
-        .post("/post/delete/reply", { replyId: replyId, postId: postId })
-        .then(() => {
-          setReplyLength(replyLength - 1);
-          setHeight(height - 63); // 이 부분 다시 체크 필요
-        });
-    } else {
-      return;
+      axios.post("/post/delete/reply", { replyId: replyId, postId: postId });
+      setReplyLength(replyLength - 1);
+      setHeight(height - 63); // 이 부분 다시 체크 필요
     }
   };
 

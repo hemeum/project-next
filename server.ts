@@ -116,19 +116,15 @@ app.prepare().then(() => {
       );
     }),
   );
-  /*
-  server.get("/user/:id", (req, res) => {
-    // /user/:id로 접근하면 /user를 렌더하되 id 파라미터를 전달합니다.
-    return app.render(req, res, "/user", { id: req.params.id });
-  });*/
 
   server.get("/community/freelist/view/:id", (req, res) => {
-    console.log(req.params, req.query.ctg); // req.query는 as로 설정한 url에 있는 쿼리를 읽을 수 있음. 실제 페이지 url에 query를 읽지 못한다.
+    console.log(req.params, req.query.ctg, req.query.page); // req.query는 as로 설정한 url에 있는 쿼리를 읽을 수 있음. 실제 페이지 url에 query를 읽지 못한다.
     // Next에서 사용하고 있는 실제 페이지 /abc/[id]를 3번째 인자로 넣어주고, 해당 동적 라우팅의 쿼리 매개변수 값을 정해서 넣어주면 된다.
     // [id]는 router.query에 포함된다.
     return app.render(req, res, "/community/freelist/view/[id]", {
       id: req.params.id,
       ctg: String(req.query.ctg),
+      page: String(req.query.page),
     });
   });
 

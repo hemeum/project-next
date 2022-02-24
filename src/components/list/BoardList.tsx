@@ -9,38 +9,63 @@ import BoardControll from "./BoardControll";
 import BoardInfo from "./BoardInfo";
 import { InfoType } from "./BoardInfo";
 
-export default function BoardList({ ctg }: any) {
+export default function BoardList({
+  ctg,
+  setDetailToggle,
+  detailToggle,
+  page,
+}: any) {
   const { isLogin } = useSelector((state: any) => {
     return state.authReducer;
   });
   const [select, setSelect] = useState("최신순");
 
   const [list, setList] = useState<any>([]);
+  const [listToggle, setListToggle] = useState(false); // 그냥 toggle
+  const [isPageNumber, setIsPageNumber] = useState(1); // 현재 페이지
+  const [pageNumbers, setPageNumbers] = useState<any>([]); // 페이지들
+
+  const getList = (num: number, isMount: boolean) => {
+    axios
+      .post("/post/list", {
+        category: ctg,
+        pageNumber: num,
+      })
+      .then((res) => {
+        if (isMount) {
+          setList(res.data.list);
+        }
+      });
+  };
+
+  const getPageNumbers = (num: number, isMount: boolean) => {
+    axios.post("/post/length", { category: ctg }).then((res) => {
+      const leng = res.data.leng;
+      const arr: any = [];
+      for (let i = 1; i <= Math.ceil(leng / 10); i++) {
+        arr.push(i);
+      }
+      const newArr = [...arr];
+      if (isMount) {
+        setPageNumbers(newArr.splice(num, 10));
+      }
+    });
+  };
 
   useEffect(() => {
-    axios.post("/post/list", { category: ctg }).then((res) => {
-      setList(res.data);
-    });
-  }, [ctg]);
+    if (page) {
+      setIsPageNumber(Number(page));
+    }
+  }, [page]);
 
-  const lists = [...list].reverse().map((item: InfoType) => {
-    // reverse()는 state 원본 배열을 뒤집기 때문에 꼭 복제해서 써야한다.
-    const date = moment(item.date).format("YYYY.MM.DD");
-    return (
-      <BoardInfo
-        key={item.id}
-        id={item.id}
-        title={item.title}
-        content={item.content}
-        nickname={item.nickname}
-        date={date}
-        heart={item.heart}
-        view={item.view}
-        reply={item.reply}
-        ctg={ctg}
-      ></BoardInfo>
-    );
-  });
+  useEffect(() => {
+    let isMount = true;
+    getList(isPageNumber, isMount);
+    getPageNumbers((Math.ceil(isPageNumber / 10) - 1) * 10, isMount);
+    return () => {
+      isMount = false;
+    };
+  }, [ctg, listToggle, isPageNumber]);
 
   const handleWrite = () => {
     if (isLogin) {
@@ -57,6 +82,29 @@ export default function BoardList({ ctg }: any) {
       }
     }
   };
+
+  const lists = [...list].map((item: InfoType, index) => {
+    const date = moment(item.date).format("YYYY.MM.DD");
+    return (
+      <BoardInfo
+        key={item.id}
+        id={item.id}
+        title={item.title}
+        content={item.content}
+        nickname={item.nickname}
+        date={date}
+        heart={item.heart}
+        view={item.view}
+        reply={item.reply}
+        ctg={ctg}
+        listToggle={listToggle}
+        setListToggle={setListToggle}
+        detailToggle={detailToggle}
+        setDetailToggle={setDetailToggle}
+        isPageNumber={isPageNumber}
+      ></BoardInfo>
+    );
+  });
 
   return (
     <>
@@ -113,7 +161,11 @@ export default function BoardList({ ctg }: any) {
           글쓰기
         </WriteButton>
       </ButtonWrap>
-      <BoardControll setList={setList} ctg={ctg} />
+      <BoardControll
+        isPageNumber={isPageNumber}
+        setIsPageNumber={setIsPageNumber}
+        pageNumbers={pageNumbers}
+      />
     </>
   );
 }

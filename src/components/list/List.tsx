@@ -8,6 +8,7 @@ import PageTop from "./PageTop";
 export default function List({ ctg }: any) {
   const [isSelect, setIsSelect] = useState(false);
   const [selectSearch, setSelectSearch] = useState("제목");
+  const [detailToggle, setDetailToggle] = useState(false);
 
   const handleSelectSearch: any = (e: {
     target: { textContent: SetStateAction<string> };
@@ -57,7 +58,11 @@ export default function List({ ctg }: any) {
             </div>
           </MainTop>
           <MainCon>
-            <BoardList ctg={ctg} />
+            <BoardList
+              ctg={ctg}
+              detailToggle={detailToggle}
+              setDetailToggle={setDetailToggle}
+            />
           </MainCon>
         </ListMain>
       </Wrap>
