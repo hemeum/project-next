@@ -1,12 +1,9 @@
 import axios from "axios";
 import styled from "styled-components";
 import { useRef, useEffect } from "react";
+import { useRouter } from "next/router";
 
-export default function BoardControll({
-  pageNumbers,
-  isPageNumber,
-  setIsPageNumber,
-}: any) {
+export default function BoardControll({ pageNumbers, page }: any) {
   const firstPRef: any = useRef();
   const pRef2: any = useRef();
   const pRef3: any = useRef();
@@ -30,15 +27,40 @@ export default function BoardControll({
     lastPRef,
   ];
 
+  const router = useRouter();
+  const ctg = router.query.ctg;
+  const searchType = router.query.searchType;
+  const searchText = router.query.searchText;
+  const orderType = router.query.orderType;
+
   const handleList = (e: any) => {
-    setIsPageNumber(Number(e.target.innerText));
+    router.push({
+      pathname: "/community/freelist",
+      query: {
+        ctg: ctg,
+        page: Number(e.target.innerText),
+        searchText: searchText ? searchText : "",
+        searchType: searchType ? searchType : "",
+        orderType: orderType === "최신순" || !orderType ? "최신순" : "좋아요순",
+      },
+    });
   };
 
   const handleLeftArrowList = () => {
     if (pageNumbers[0] === 1) {
       return;
     }
-    setIsPageNumber(pageNumbers[0] - 1);
+
+    router.push({
+      pathname: "/community/freelist",
+      query: {
+        ctg: ctg,
+        page: Number(pageNumbers[0] - 1),
+        searchText: searchText ? searchText : "",
+        searchType: searchType ? searchType : "",
+        orderType: orderType === "최신순" || !orderType ? "최신순" : "좋아요순",
+      },
+    });
   };
 
   const handleRightArrowList = () => {
@@ -46,7 +68,16 @@ export default function BoardControll({
       return;
     }
 
-    setIsPageNumber(pageNumbers[pageNumbers.length - 1] + 1);
+    router.push({
+      pathname: "/community/freelist",
+      query: {
+        ctg: ctg,
+        page: Number(pageNumbers[pageNumbers.length - 1] + 1),
+        searchText: searchText ? searchText : "",
+        searchType: searchType ? searchType : "",
+        orderType: orderType === "최신순" || !orderType ? "최신순" : "좋아요순",
+      },
+    });
   };
 
   const numbers = pageNumbers.map((i: any, index: number) => {
@@ -58,14 +89,30 @@ export default function BoardControll({
   });
 
   useEffect(() => {
-    if (pageNumbers.length !== 0 && pageNumbers.indexOf(isPageNumber) !== -1) {
-      let index = pageNumbers.indexOf(isPageNumber);
+    // page에 따른 컨트롤 active 주기
+    if (page) {
+      if (
+        pageNumbers.length !== 0 &&
+        pageNumbers.indexOf(Number(page)) !== -1
+      ) {
+        let index = pageNumbers.indexOf(Number(page));
 
-      for (let i = 0; i < pageNumbers.length; i++) {
-        refArr[i].current.classList.remove("active");
+        for (let i = 0; i < pageNumbers.length; i++) {
+          refArr[i].current.classList.remove("active");
+        }
+
+        refArr[index].current.classList.add("active");
       }
+    } else {
+      if (pageNumbers.length !== 0 && pageNumbers.indexOf(1) !== -1) {
+        let index = pageNumbers.indexOf(1);
 
-      refArr[index].current.classList.add("active");
+        for (let i = 0; i < pageNumbers.length; i++) {
+          refArr[i].current.classList.remove("active");
+        }
+
+        refArr[index].current.classList.add("active");
+      }
     }
   }, [pageNumbers]);
 
@@ -92,7 +139,7 @@ const Controll = styled.div<{ lengs: number }>`
   width: ${({ lengs }) => {
     return `${lengs * 40 + 120}px `;
   }};
-  margin: 0 auto 80px;
+  margin: 60px auto 80px;
   text-align: center;
   display: flex;
   align-items: center;

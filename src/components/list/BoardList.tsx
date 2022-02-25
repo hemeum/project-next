@@ -8,64 +8,62 @@ import moment from "moment";
 import BoardControll from "./BoardControll";
 import BoardInfo from "./BoardInfo";
 import { InfoType } from "./BoardInfo";
+import BoardSearch from "./BoardSearch";
 
-export default function BoardList({
-  ctg,
-  setDetailToggle,
-  detailToggle,
-  page,
-}: any) {
+export default function BoardList({ ctg, isSelect, setIsSelect }: any) {
   const { isLogin } = useSelector((state: any) => {
     return state.authReducer;
   });
-  const [select, setSelect] = useState("최신순");
 
+  const router = useRouter();
+  const searchText = router.query.searchText;
+  const searchType: any = router.query.searchType;
+  const page: any = Number(router.query.page);
+  const orderType = router.query.orderType;
+
+  /* list and controll */
+  const [select, setSelect] = useState("최신순");
   const [list, setList] = useState<any>([]);
-  const [listToggle, setListToggle] = useState(false); // 그냥 toggle
-  const [isPageNumber, setIsPageNumber] = useState(1); // 현재 페이지
   const [pageNumbers, setPageNumbers] = useState<any>([]); // 페이지들
 
-  const getList = (num: number, isMount: boolean) => {
+  const getList = (
+    page: number,
+    index: number,
+    searchType?: string | string[],
+    searchText?: string | string[],
+    orderType?: string | string[],
+  ) => {
+    // page, ctg, orderType은 기본값이 필요함.
+    // searchText가 ''일 때는 searchType과 searchText는 기본값 필요X
     axios
       .post("/post/list", {
-        category: ctg,
-        pageNumber: num,
+        category: ctg
+          ? ctg
+          : router.pathname === "/community/freelist"
+          ? "자유게시판"
+          : "공지사항",
+        pageNumber: page ? page : 1,
+        searchType: searchType,
+        searchText: searchText,
+        orderType: orderType === "최신순" || !orderType ? "최신순" : "좋아요순",
       })
       .then((res) => {
-        if (isMount) {
-          setList(res.data.list);
+        const leng = res.data.leng;
+        const arr: any = [];
+        for (let i = 1; i <= Math.ceil(leng / 10); i++) {
+          arr.push(i);
         }
+        const newArr = [...arr];
+
+        setPageNumbers(newArr.splice(index, 10));
+        setList(res.data.list);
       });
   };
 
-  const getPageNumbers = (num: number, isMount: boolean) => {
-    axios.post("/post/length", { category: ctg }).then((res) => {
-      const leng = res.data.leng;
-      const arr: any = [];
-      for (let i = 1; i <= Math.ceil(leng / 10); i++) {
-        arr.push(i);
-      }
-      const newArr = [...arr];
-      if (isMount) {
-        setPageNumbers(newArr.splice(num, 10));
-      }
-    });
-  };
-
   useEffect(() => {
-    if (page) {
-      setIsPageNumber(Number(page));
-    }
-  }, [page]);
-
-  useEffect(() => {
-    let isMount = true;
-    getList(isPageNumber, isMount);
-    getPageNumbers((Math.ceil(isPageNumber / 10) - 1) * 10, isMount);
-    return () => {
-      isMount = false;
-    };
-  }, [ctg, listToggle, isPageNumber]);
+    let index = (Math.ceil(page / 10) - 1) * 10;
+    getList(page, index, searchType, searchText, orderType);
+  }, [ctg, page, searchText, searchType, orderType]);
 
   const handleWrite = () => {
     if (isLogin) {
@@ -97,17 +95,14 @@ export default function BoardList({
         view={item.view}
         reply={item.reply}
         ctg={ctg}
-        listToggle={listToggle}
-        setListToggle={setListToggle}
-        detailToggle={detailToggle}
-        setDetailToggle={setDetailToggle}
-        isPageNumber={isPageNumber}
+        page={page}
       ></BoardInfo>
     );
   });
 
   return (
     <>
+      <BoardSearch isSelect={isSelect} setIsSelect={setIsSelect}></BoardSearch>
       <ListTop>
         <div>
           {select === "최신순" ? (
@@ -115,7 +110,24 @@ export default function BoardList({
           ) : (
             <i aria-hidden className="fa-solid fa-circle"></i>
           )}
-          <p className="active">최신순</p>
+          <p
+            className="active"
+            onClick={() => {
+              router.push({
+                pathname: "/community/freelist",
+                query: {
+                  ctg: ctg,
+                  page: 1,
+                  searchText: searchText,
+                  searchType: searchType,
+                  orderType: "최신순",
+                },
+              });
+              setSelect("최신순");
+            }}
+          >
+            최신순
+          </p>
         </div>
         <div>
           {select === "좋아요순" ? (
@@ -123,7 +135,23 @@ export default function BoardList({
           ) : (
             <i aria-hidden className="fa-solid fa-circle"></i>
           )}
-          <p>좋아요순</p>
+          <p
+            onClick={() => {
+              router.push({
+                pathname: "/community/freelist",
+                query: {
+                  ctg: ctg,
+                  page: 1,
+                  searchText: searchText,
+                  searchType: searchType,
+                  orderType: "좋아요순",
+                },
+              });
+              setSelect("좋아요순");
+            }}
+          >
+            좋아요순
+          </p>
         </div>
       </ListTop>
       <ListNews>
@@ -131,41 +159,39 @@ export default function BoardList({
           <div>
             <p>공지</p>
             <p>
-              <span>알려진 이슈</span>
+              <span>알려진 이슈를 안내해드립니다.</span>
             </p>
-            <p>날짜</p>
+            <p>2022.02.24</p>
           </div>
         </li>
         <li>
           <div>
             <p>공지</p>
             <p>
-              <span>알려진 이슈</span>
+              <span>로스트아크 DirectX 11 지원에 대한 안내</span>
             </p>
-            <p>날짜</p>
+            <p>2022.02.23</p>
           </div>
         </li>
         <li>
           <div>
             <p>공지</p>
             <p>
-              <span>알려진 이슈</span>
+              <span>모험가 여러분의 계정 보호를 위한 안내</span>
             </p>
-            <p>날짜</p>
+            <p>2022.02.22</p>
           </div>
         </li>
       </ListNews>
-      <ul>{lists}</ul>
-      <ButtonWrap>
-        <WriteButton type="button" onClick={handleWrite}>
-          글쓰기
-        </WriteButton>
-      </ButtonWrap>
-      <BoardControll
-        isPageNumber={isPageNumber}
-        setIsPageNumber={setIsPageNumber}
-        pageNumbers={pageNumbers}
-      />
+      <ListMain>{lists}</ListMain>
+      {ctg === "공지사항" ? undefined : (
+        <ButtonWrap>
+          <WriteButton type="button" onClick={handleWrite}>
+            글쓰기
+          </WriteButton>
+        </ButtonWrap>
+      )}
+      <BoardControll pageNumbers={pageNumbers} page={page} />
     </>
   );
 }
@@ -234,9 +260,13 @@ const ListNews = styled.ul`
   }
 `;
 
+const ListMain = styled.ul`
+  height: 600px;
+`;
+
 const ButtonWrap = styled.div`
   position: relative;
-  height: 110px;
+  height: 50px;
 `;
 
 const WriteButton = styled.button`

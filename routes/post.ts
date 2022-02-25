@@ -1,5 +1,6 @@
 import express from "express";
 const router = express.Router();
+import listSearch from "./../modules/listSearch";
 
 export default (connection: any) => {
   router.post("/add", (req, res) => {
@@ -41,48 +42,61 @@ export default (connection: any) => {
 
   router.post("/list", (req, res) => {
     connection.query(
-      `select * from post where category = ? order by id desc limit ${
-        10 * req.body.pageNumber
-      } `,
+      `select * from post where category = ? order by ${
+        req.body.orderType === "최신순" ? "id desc" : "heart desc, id desc"
+      }`,
       [req.body.category],
       (err: any, rows: any) => {
         if (err) {
           console.log("DB list * pageNumber 가져오기 err");
         } else {
-          if (req.body.pageNumber === 1) {
-            res.send({ list: rows });
-          } else {
-            res.send({
-              list: rows.reverse().splice(0, 10).reverse(),
-            });
-          }
-        }
-      },
-    );
-  });
-
-  /*const orderPost = rows;
-            const spliceOrderPost = [...rows].reverse().splice(0, 10);
-            let splicePostIndexs = [];
-            for (let i = 0; i < spliceOrderPost.length; i++) {
-              for (let j = 0; j < orderPost.length; j++) {
-                if (spliceOrderPost[i] === orderPost[j]) {
-                  splicePostIndexs.push(j);
-                }
-              }
+          let allListLength = Number(rows.length);
+          let searchType = req.body.searchType;
+          let searchText = req.body.searchText;
+          let page = req.body.pageNumber;
+          let spliceRows = [...rows].splice(0, 10 * page);
+          if (page === 1) {
+            if (!searchText || searchText.length === 0) {
+              // 검색하지 않았을 때
+              res.send({ list: spliceRows, leng: allListLength });
+            } else {
+              // 검색했을 때
+              let sendItem = listSearch(
+                searchType,
+                [...rows],
+                searchText,
+                page,
+              );
+              res.send(sendItem);
             }
-            console.log(splicePostIndexs.reverse()); // 잘라낸 post의 인덱스를 담은 배열*/
-
-  router.post("/detail", (req, res) => {
-    connection.query(
-      "select * from post where id = ?",
-      [Number(req.body.postId)],
-      (err: any, rows: any) => {
-        if (err) {
-          console.log("DB detail 가져오기 err");
-        } else {
-          const detail = rows[0];
-          res.send(detail);
+          } else {
+            if (!searchText || searchText.length === 0) {
+              // 검색하지 않았을 때
+              let spliceleng;
+              if (spliceRows.length % 10 === 0) {
+                spliceleng = 10;
+              } else {
+                spliceleng = spliceRows.length % 10;
+              }
+              let list = [...spliceRows]
+                .reverse()
+                .splice(0, spliceleng)
+                .reverse();
+              res.send({
+                list: list,
+                leng: allListLength,
+              });
+            } else {
+              // 검색했을 때
+              let sendItem = listSearch(
+                searchType,
+                [...rows],
+                searchText,
+                page,
+              );
+              res.send(sendItem);
+            }
+          }
         }
       },
     );
@@ -98,6 +112,21 @@ export default (connection: any) => {
         } else {
           const listLength = Number(rows.length);
           res.send({ leng: listLength });
+        }
+      },
+    );
+  });
+
+  router.post("/detail", (req, res) => {
+    connection.query(
+      "select * from post where id = ?",
+      [Number(req.body.postId)],
+      (err: any, rows: any) => {
+        if (err) {
+          console.log("DB detail 가져오기 err");
+        } else {
+          const detail = rows[0];
+          res.send(detail);
         }
       },
     );

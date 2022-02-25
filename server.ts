@@ -125,6 +125,20 @@ app.prepare().then(() => {
       id: req.params.id,
       ctg: String(req.query.ctg),
       page: String(req.query.page),
+      searchText: String(req.query.searchText),
+      searchType: String(req.query.searchType),
+      orderType: String(req.query.orderType),
+    });
+  });
+
+  server.get("/news/noticelist/view/:id", (req, res) => {
+    return app.render(req, res, "/news/noticelist/view/[id]", {
+      id: req.params.id,
+      ctg: String(req.query.ctg),
+      page: String(req.query.page),
+      searchText: String(req.query.searchText),
+      searchType: String(req.query.searchType),
+      orderType: String(req.query.orderType),
     });
   });
 

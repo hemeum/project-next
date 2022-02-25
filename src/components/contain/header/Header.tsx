@@ -176,19 +176,36 @@ function Header() {
       id: 1,
       menu: "새소식",
       items: [
-        { id: 7, item: "공지사항", url: "/" },
-        { id: 8, item: "업데이트", url: "/" },
-        { id: 9, item: "이벤트", url: "/" },
+        {
+          id: 7,
+          item: "공지사항",
+          url: {
+            pathname: "/news/noticelist",
+            query: {
+              ctg: "공지사항",
+              page: 1,
+              searchType: "",
+              searchText: "",
+              orderType: "최신순",
+            },
+          },
+          as: "/news/noticelist",
+        },
+        { id: 8, item: "업데이트", url: "/", as: "/" },
+        { id: 9, item: "이벤트", url: "/", as: "/" },
       ],
-      url: "/",
+      url: {
+        pathname: "/news/noticelist",
+        query: { ctg: "공지사항", page: 1 },
+      },
     },
     {
       id: 2,
       menu: "게임정보",
       items: [
-        { id: 10, item: "전투정보실", url: "/" },
-        { id: 11, item: "세계관", url: "/" },
-        { id: 12, item: "클래스", url: "/" },
+        { id: 10, item: "전투정보실", url: "/", as: "/" },
+        { id: 11, item: "세계관", url: "/", as: "/" },
+        { id: 12, item: "클래스", url: "/", as: "/" },
       ],
       url: "/",
     },
@@ -196,9 +213,9 @@ function Header() {
       id: 3,
       menu: "가이드",
       items: [
-        { id: 13, item: "게임 가이드", url: "/" },
-        { id: 14, item: "아이템 사전", url: "/" },
-        { id: 15, item: "콘텐츠", url: "/" },
+        { id: 13, item: "게임 가이드", url: "/", as: "/" },
+        { id: 14, item: "아이템 사전", url: "/", as: "/" },
+        { id: 15, item: "콘텐츠", url: "/", as: "/" },
       ],
       url: "/",
     },
@@ -211,21 +228,34 @@ function Header() {
           item: "자유게시판",
           url: {
             pathname: "/community/freelist",
-            query: { ctg: "자유게시판" },
+            query: {
+              ctg: "자유게시판",
+              page: 1,
+              searchType: "",
+              searchText: "",
+              orderType: "최신순",
+            },
           },
+          as: "/community/freelist",
         },
-        { id: 17, item: "직업게시판", url: "/" },
-        { id: 18, item: "길드모집", url: "/" },
+        { id: 17, item: "직업게시판", url: "/", as: "/" },
+        { id: 18, item: "길드모집", url: "/", as: "/" },
       ],
-      url: "/community/freelist",
+      url: {
+        pathname: "/community/freelist",
+        query: {
+          ctg: "자유게시판",
+          page: 1,
+        },
+      },
     },
     {
       id: 5,
       menu: "미디어",
       items: [
-        { id: 19, item: "로아 상영관", url: "/" },
-        { id: 20, item: "공모전", url: "/" },
-        { id: 21, item: "OST", url: "/" },
+        { id: 19, item: "로아 상영관", url: "/", as: "/" },
+        { id: 20, item: "공모전", url: "/", as: "/" },
+        { id: 21, item: "OST", url: "/", as: "/" },
       ],
       url: "/",
     },
@@ -233,9 +263,9 @@ function Header() {
       id: 6,
       menu: "고객센터",
       items: [
-        { id: 22, item: "FAQ", url: "/" },
-        { id: 23, item: "신고센터", url: "/" },
-        { id: 24, item: "보안서비스", url: "/" },
+        { id: 22, item: "FAQ", url: "/", as: "/" },
+        { id: 23, item: "신고센터", url: "/", as: "/" },
+        { id: 24, item: "보안서비스", url: "/", as: "/" },
       ],
       url: "/",
     },
@@ -271,7 +301,7 @@ function Header() {
     const items = menu.items.map((item) => {
       return (
         <MenuListItem key={item.id} onClick={handleHeaderBg}>
-          <Link href={item.url}>
+          <Link href={item.url} as={item.as}>
             <a onClick={handleHeaderBg}>{item.item}</a>
           </Link>
         </MenuListItem>
