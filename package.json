@@ -5,7 +5,8 @@
     "dev": "nodemon --exec ts-node server.ts",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "next build && next export"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^32.0.0",
