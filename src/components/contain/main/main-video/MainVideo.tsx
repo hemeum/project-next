@@ -22,7 +22,7 @@ function MainVideo({ youtubeList }: { youtubeList: [] }) {
         <Link href="/">
           <a>
             <img
-              src={video.snippet.thumbnails.medium.url}
+              src={video.snippet.thumbnails.medium?.url}
               alt="추천 영상 이미지"
             ></img>
             <TextBox>
