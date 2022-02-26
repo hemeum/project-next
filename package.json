@@ -8,6 +8,9 @@
     "lint": "next lint",
     "deploy": "next build && next export"
   },
+  "eslintConfig": {
+    "parser": "@babel/eslint-parser"
+  },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^32.0.0",
     "@ckeditor/ckeditor5-react": "^4.0.0",
@@ -39,6 +42,7 @@
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.17.0",
     "@types/axios": "^0.14.0",
     "@types/bcrypt": "^5.0.0",
     "@types/ckeditor": "^4.9.10",
