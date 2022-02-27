@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import Gnb from "src/components/Gnb";
 
 import { createWrapper } from "next-redux-wrapper";
-import Header from "src/components/contain/header/Header";
+
 const store = require("src/redux/store");
 
 export const wrapper = createWrapper(store);

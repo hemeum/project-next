@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "next build && next export"
+    "deploy": "tsc && next build && next export"
   },
   "eslintConfig": {
     "parser": "@babel/eslint-parser"

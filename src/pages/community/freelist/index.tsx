@@ -1,5 +1,4 @@
 import List from "src/components/list/List";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
