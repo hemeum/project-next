@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon --exec ts-node server.ts",
-    "build": "next build",
+    "build": "tsc src && next build",
     "start": "next start",
     "lint": "next lint"
   },
