@@ -4,9 +4,8 @@
   "scripts": {
     "dev": "nodemon --exec ts-node server.ts",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "deploy": "tsc && next build && next export"
+    "start": "nodemon --exec ts-node server.ts",
+    "lint": "next lint"
   },
   "eslintConfig": {
     "parser": "@babel/eslint-parser"
