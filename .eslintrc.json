@@ -16,7 +16,7 @@
     }
   },
 
-  "parser": "/usr/local/lib/node_modules/babel-eslint",
+  "parser": "@babel/eslint-parser",
 
   "parserOptions": {
     "ecmaFeatures": {
