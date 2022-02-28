@@ -154,7 +154,7 @@ app.prepare().then(() => {
   });
 
   // 프론트 서버 가동
-  server.listen(3000, () =>
+  server.listen(process.env.PORT || 3000, () =>
     console.log(`next+express front on : localhost:3000`),
   );
 });
