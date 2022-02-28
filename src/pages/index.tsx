@@ -3,11 +3,14 @@ import Head from "next/head";
 import axios from "axios";
 
 import Wrap from "src/components/contain/Wrap";
+import { useEffect } from "react";
 
 const Home: NextPage = ({ youtubeList }: any) => {
-  axios.get("/").then((res) => {
-    console.log(res.data.hi);
-  });
+  useEffect(() => {
+    axios.get("/").then((res) => {
+      console.log(res.data.hi);
+    });
+  }, []);
   return (
     <div>
       <Head>
