@@ -2,7 +2,7 @@ import axios from "axios";
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 
 function login() {
-  const res: any = axios.get("/auth/keep_login", { withCredentials: true });
+  const res: any = axios.get("/api/auth/keep_login", { withCredentials: true });
   return res;
 }
 
