@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 const Home: NextPage = ({ youtubeList }: any) => {
   useEffect(() => {
-    axios.get("/").then((res) => {
+    axios.get("/api/hello").then((res) => {
       console.log(res.data.hi);
     });
   }, []);
