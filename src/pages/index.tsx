@@ -5,6 +5,8 @@ import axios from "axios";
 import Wrap from "src/components/contain/Wrap";
 
 const Home: NextPage = ({ youtubeList }: any) => {
+  const hi = axios.get("/");
+  console.log(hi);
   return (
     <div>
       <Head>

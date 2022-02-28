@@ -148,6 +148,10 @@ app.prepare().then(() => {
   const post = postRoute(connection);
   server.use("/post", post);
 
+  server.get("/", (req, res) => {
+    res.send({ hi: "hi" });
+  });
+
   // 그 외 라우팅 처리
   server.get("*", (req, res) => {
     return handle(req, res);
