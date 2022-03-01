@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node server.ts",
     "build": "tsc && next build",
-    "start": "ts-node server.ts -p $PORT",
+    "start": "next start -p $PORT",
     "heroku-postbuild": "npm run build",
     "lint": "next lint"
   },
