@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node server.ts",
     "build": "tsc && next build",
-    "start": "NODE_ENV=production ts-node server.ts",
+    "start": "NODE_ENV=production node ts-node server.ts",
     "heroku-postbuild": "npm run build",
     "lint": "next lint"
   },
