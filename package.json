@@ -44,6 +44,7 @@
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.17.0",
     "@types/axios": "^0.14.0",
     "@types/bcrypt": "^5.0.0",
     "@types/ckeditor": "^4.9.10",
