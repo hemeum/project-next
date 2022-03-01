@@ -46,7 +46,7 @@ const Jwtconfig = {
   secretOrKey: process.env.JWT_SECRET_KEY,
 };
 
-const dev = false;
+const dev = process.env.NODE_ENV !== "production";
 
 const app = next({ dev });
 
