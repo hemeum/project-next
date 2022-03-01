@@ -1,1 +1,1 @@
-web:node --exec ts-node server.ts
+web:ts-node server.ts
