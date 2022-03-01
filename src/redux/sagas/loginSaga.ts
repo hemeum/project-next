@@ -4,7 +4,7 @@ import Router from "next/router";
 import { useRouter } from "next/router";
 
 function login(action: any) {
-  const res: any = axios.post("/auth/login", {
+  const res: any = axios.post("/api/auth/login", {
     username: action.payload.username,
     password: action.payload.password,
   });

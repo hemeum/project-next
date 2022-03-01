@@ -72,7 +72,7 @@ export default (
     },
   );
 
-  /*router.get("/keep_login", (req, res) => {
+  router.get("/keep_login", (req, res) => {
     // 로그인할 때 res.cookie로 jwt 토큰을 클라이언트 쿠키에 전송
     // 로그인 유지를 위한 재요청이 들어올 때 req.cookies.key에 담긴 토큰이 존재하면, jwt 전략 실행
     // 전략을 통해 jwt에 담긴 정보로 유저 정보가 조회된다면 리턴된 user로 로그인 유지 정보 클라에게 전달
@@ -100,7 +100,7 @@ export default (
     } else {
       res.status(403).send("쿠키 없음");
     }
-  });*/
+  });
 
   router.get("/logout", (req, res) => {
     console.log("로그아웃");
