@@ -148,6 +148,9 @@ app.prepare().then(() => {
   const post = postRoute(connection);
   server.use("/post", post);
 
+  const hi: any = hiRoute();
+  server.use("/hi", hi);
+
   // 그 외 라우팅 처리
   server.get("*", (req, res) => {
     return handle(req, res);
@@ -158,3 +161,6 @@ app.prepare().then(() => {
     console.log(`next+express front on : localhost:3000`),
   );
 });
+function hiRoute() {
+  throw new Error("Function not implemented.");
+}

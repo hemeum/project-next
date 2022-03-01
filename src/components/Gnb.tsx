@@ -1,11 +1,20 @@
 import Link from "next/link";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 function Gnb() {
   const nickname = useSelector((state: any) => {
     return state.authReducer.nickname;
   });
+
+  const [toggle, setToggle] = useState(false);
+  useEffect(() => {
+    axios.get("/hi/abc").then((res) => {
+      console.log(res.data.hi);
+    });
+  }, [toggle]);
 
   return (
     <Wrap>
@@ -19,7 +28,13 @@ function Gnb() {
           </Link>
         </Logo>
         <ul>
-          <li>PC게임</li>
+          <li
+            onClick={() => {
+              setToggle(!toggle);
+            }}
+          >
+            PC게임
+          </li>
           <li>모바일게임</li>
           <li>인디게임</li>
         </ul>
