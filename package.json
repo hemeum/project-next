@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon --exec ts-node server.ts",
-    "build": "tsc src && next build",
+    "build": "tsc && next build",
     "start": "next start -p $PORT",
     "heroku-postbuild": "npm run build",
     "lint": "next lint"
