@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "nodemon --exec ts-node server.ts",
     "build": "tsc src && next build",
-    "start": "next start",
+    "start": "next start -p $PORT",
+    "heroku-postbuild": "npm run build",
     "lint": "next lint"
   },
   "dependencies": {
