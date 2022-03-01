@@ -61,6 +61,7 @@
     "@types/react-slick": "^0.23.8",
     "@types/redux-saga": "^0.10.5",
     "@types/styled-components": "^5.1.19",
+    "@typescript-eslint/parser": "^5.13.0",
     "babel-plugin-styled-components": "^2.0.2",
     "eslint": "^8.6.0",
     "eslint-config-airbnb": "^19.0.4",
