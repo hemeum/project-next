@@ -11,6 +11,7 @@ import passportJwt from "passport-jwt";
 
 import authRoute from "./routes/auth";
 import postRoute from "./routes/post";
+import hiRoute from "./routes/hi";
 const LocalStrategy = passportLocal.Strategy;
 const JwtStrategy = passportJwt.Strategy;
 
@@ -148,7 +149,7 @@ app.prepare().then(() => {
   const post = postRoute(connection);
   server.use("/post", post);
 
-  const hi: any = hiRoute();
+  const hi = hiRoute();
   server.use("/hi", hi);
 
   // 그 외 라우팅 처리
@@ -161,6 +162,3 @@ app.prepare().then(() => {
     console.log(`next+express front on : localhost:3000`),
   );
 });
-function hiRoute() {
-  throw new Error("Function not implemented.");
-}
