@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { route } from "next/dist/server/router";
 
 export interface InfoType {
   key?: number;
@@ -12,8 +13,6 @@ export interface InfoType {
   reply: number;
   date: string;
   id: number;
-  ctg: string;
-  page: number;
 }
 
 export default function BoardInfo({
@@ -25,13 +24,17 @@ export default function BoardInfo({
   reply,
   date,
   id,
-  ctg,
-  page,
 }: InfoType) {
   const router = useRouter();
-  const searchText = router.query.searchText;
-  const searchType = router.query.searchType;
-  const orderType = router.query.orderType;
+  const ctg = router.query.ctg
+    ? router.query.ctg
+    : router.pathname === "/community/freelist"
+    ? "자유게시판"
+    : "공지사항";
+  const page = router.query.page ? router.query.page : 1;
+  const searchText = router.query.searchText ? router.query.searchText : "";
+  const searchType = router.query.searchType ? router.query.searchType : "";
+  const orderType = router.query.orderType ? router.query.orderType : "최신순";
 
   const handleInfo = () => {
     axios.post("/api/post/view/add", { postId: id }).then((res) => {

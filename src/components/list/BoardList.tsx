@@ -94,8 +94,6 @@ export default function BoardList({ ctg, isSelect, setIsSelect }: any) {
         heart={item.heart}
         view={item.view}
         reply={item.reply}
-        ctg={ctg}
-        page={page}
       ></BoardInfo>
     );
   });

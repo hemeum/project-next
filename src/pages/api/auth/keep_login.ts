@@ -27,6 +27,7 @@ export default (req: any, res: any) => {
     }),
   );
 
+  console.log(req.cookies);
   if (req.cookies.token) {
     passport.authenticate(
       "jwt",

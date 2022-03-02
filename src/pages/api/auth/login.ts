@@ -50,15 +50,11 @@ export default async (req: any, res: any) => {
       } else {
         let secret: any = process.env.JWT_SECRET_KEY;
         const token = jwt.sign(user.id, secret);
+        const cookieOptions = { httpOnly: true, maxAge: 60 * 60 * 1000 };
         res
-          .setHeader(
-            "Set-Cookie",
-            serialize("token", token, {
-              httpOnly: true,
-              maxAge: 60 * 60 * 1000,
-            }),
-          )
+          .setHeader("Set-Cookie", serialize("token", token), cookieOptions)
           .send(user.nickname);
+        //res.setHeader("Set-Cookie", token).send(user.nickname);
       }
     },
   )(req, res);

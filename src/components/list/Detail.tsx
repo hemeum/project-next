@@ -25,6 +25,8 @@ export default function Detail() {
   const postId = router.query.id;
   const page = router.query.page;
 
+  console.log(ctg);
+
   const mainRef: any = useRef();
   const replyRef: any = useRef();
 
