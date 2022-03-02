@@ -23,6 +23,9 @@ export default (req: any, res: any) => {
 
   const connection = mysql.createConnection(mysqlOptions);
   connection.connect();
+  setInterval(function () {
+    connection.query("SELECT 1");
+  }, 5000);
 
   console.log("로그아웃");
   res.clearCookie("token").send("로그아웃");

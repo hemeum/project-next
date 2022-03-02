@@ -22,6 +22,9 @@ export default (req: any, res: any) => {
 
   const connection = mysql.createConnection(mysqlOptions);
   connection.connect();
+  setInterval(function () {
+    connection.query("SELECT 1");
+  }, 5000);
 
   connection.query(`update post set reply = reply + 1 where id = ?`, [
     Number(req.body.postId),

@@ -23,6 +23,9 @@ export default (req: any, res: any) => {
 
   const connection = mysql.createConnection(mysqlOptions);
   connection.connect();
+  setInterval(function () {
+    connection.query("SELECT 1");
+  }, 5000);
 
   bcrypt.hash(req.body.password, saltRounds, (err: any, hash: any) => {
     if (err) {

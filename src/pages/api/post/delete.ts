@@ -22,6 +22,9 @@ export default (req: any, res: any) => {
 
   const connection = mysql.createConnection(mysqlOptions);
   connection.connect();
+  setInterval(function () {
+    connection.query("SELECT 1");
+  }, 5000);
 
   connection.query("delete from post where id = ?", [req.body.postId]);
   connection.query("delete from reply where post_id = ?", [req.body.postId]);

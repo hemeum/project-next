@@ -29,6 +29,9 @@ export default (req: any, res: any) => {
 
   const connection = mysql.createConnection(mysqlOptions);
   connection.connect();
+  setInterval(function () {
+    connection.query("SELECT 1");
+  }, 5000);
 
   const Jwtconfig = {
     // req를 자동으로 인자로 받아줌
