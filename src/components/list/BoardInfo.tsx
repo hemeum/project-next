@@ -34,7 +34,7 @@ export default function BoardInfo({
   const orderType = router.query.orderType;
 
   const handleInfo = () => {
-    axios.post("/post/add/view", { postId: id }).then((res) => {
+    axios.post("/api/post/view/add", { postId: id }).then((res) => {
       if (ctg === "공지사항") {
         router.push(
           {

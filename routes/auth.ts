@@ -51,26 +51,23 @@ export default (
     });
   });
 
-  router.post(
-    "/repeactCheck",
-    (req: express.Request, res: express.Response) => {
-      connection.query(
-        "select username from user where username = ?",
-        [req.body.username],
-        (err: any, rows: []) => {
-          if (err) {
-            console.log("중복 아이디 조회 DB err");
-          } else if (rows.length === 0) {
-            console.log("사용가능한 아이디 입니다.");
-            res.send(true);
-          } else {
-            console.log("중복된 아이디 입니다.");
-            res.send(false);
-          }
-        },
-      );
-    },
-  );
+  router.post("/repeatCheck", (req: express.Request, res: express.Response) => {
+    connection.query(
+      "select username from user where username = ?",
+      [req.body.username],
+      (err: any, rows: []) => {
+        if (err) {
+          console.log("중복 아이디 조회 DB err");
+        } else if (rows.length === 0) {
+          console.log("사용가능한 아이디 입니다.");
+          res.send(true);
+        } else {
+          console.log("중복된 아이디 입니다.");
+          res.send(false);
+        }
+      },
+    );
+  });
 
   router.get("/keep_login", (req, res) => {
     // 로그인할 때 res.cookie로 jwt 토큰을 클라이언트 쿠키에 전송

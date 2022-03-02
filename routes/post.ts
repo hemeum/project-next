@@ -102,7 +102,7 @@ export default (connection: any) => {
     );
   });
 
-  router.post("/length", (req, res) => {
+  /*router.post("/length", (req, res) => {
     connection.query(
       "select * from post where category = ?",
       [req.body.category],
@@ -115,7 +115,7 @@ export default (connection: any) => {
         }
       },
     );
-  });
+  });*/
 
   router.post("/detail", (req, res) => {
     connection.query(

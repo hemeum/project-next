@@ -40,7 +40,7 @@ export default function Write() {
     e.preventDefault();
     if (prevTitle && prevContent) {
       axios
-        .post("/post/edit", {
+        .post("/api/post/edit", {
           postId: prevPostId,
           title: title,
           content: content,
@@ -58,7 +58,7 @@ export default function Write() {
         });
     } else {
       axios
-        .post("/post/add", {
+        .post("/api/post/add", {
           nickname: nickname,
           category: ctg,
           title: title,

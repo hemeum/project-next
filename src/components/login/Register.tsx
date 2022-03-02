@@ -27,7 +27,7 @@ function Register() {
   const handleResiter = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     axios
-      .post("/auth/register", {
+      .post("/apit/auth/register", {
         username: username.inputValue,
         pwd: pwd.inputValue,
         nickname: nickname.inputValue,
@@ -58,7 +58,7 @@ function Register() {
         setCheckRgx(newCheckRgx);
         // 중복된 아이디인지 체크
         axios
-          .post("/auth/repeactCheck", { username: username.inputValue })
+          .post("/api/auth/repeatCheck", { username: username.inputValue })
           .then((res) => {
             setRepeactCheck(res.data);
           });

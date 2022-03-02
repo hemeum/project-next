@@ -49,7 +49,7 @@ export default function Detail() {
   }, [detail, postId, height, replyLength]);
 
   useEffect(() => {
-    axios.post("/post/detail", { postId: postId }).then((res) => {
+    axios.post("/api/post/detail", { postId: postId }).then((res) => {
       const date = moment(res.data.date).format("YYYY년 M월 D일 HH:mm");
       res.data.date = date;
       setDetail(res.data);
@@ -61,7 +61,7 @@ export default function Detail() {
   const submitReply = debounce(() => {
     if (isLogin) {
       axios
-        .post("/post/add/reply", {
+        .post("/api/post/reply/add", {
           reply: reply,
           nickname: nickname,
           postId: postId,
@@ -102,14 +102,17 @@ export default function Detail() {
     if (isLogin) {
       if (!isHeart) {
         axios
-          .post("/post/add/heart", { postId: postId, nickname: nickname })
+          .post("/api/post/heart/add", { postId: postId, nickname: nickname })
           .then((res) => {
             setIsHeart(res.data.isHeart);
             setHeartLeng(heartLeng + 1);
           });
       } else {
         axios
-          .post("/post/delete/heart", { postId: postId, nickname: nickname })
+          .post("/api/post/heart/delete", {
+            postId: postId,
+            nickname: nickname,
+          })
           .then((res) => {
             setIsHeart(res.data.isHeart);
             setHeartLeng(heartLeng - 1);
@@ -128,7 +131,7 @@ export default function Detail() {
   const handlePostDelete = () => {
     const yesDelete = confirm("정말 삭제하시겠습니까?");
     if (yesDelete) {
-      axios.post("/post/delete", { postId: postId }).then(() => {
+      axios.post("/api/post/delete", { postId: postId }).then(() => {
         router.push({ pathname: "/community/freelist", query: { ctg: ctg } });
       });
     } else {
@@ -155,7 +158,7 @@ export default function Detail() {
 
   useEffect(() => {
     axios
-      .post("/post/heart", { postId: postId, nickname: nickname })
+      .post("/api/post/heart", { postId: postId, nickname: nickname })
       .then((res) => {
         setIsHeart(res.data.isHeart);
       });

@@ -22,7 +22,7 @@ export default function Reply({
   const [editToggle, setEditToggle] = useState(false); // toggle
 
   useEffect(() => {
-    axios.post("/post/reply", { postId: postId }).then((res) => {
+    axios.post("/api/post/reply", { postId: postId }).then((res) => {
       setReplys(res.data);
       setReplyLength(res.data.length);
       const isEditArr = res.data.map(() => {
@@ -50,7 +50,7 @@ export default function Reply({
 
   const submitEdit = debounce((replyId) => {
     axios
-      .post("/post/edit/reply", { replyId: replyId, reply: editedReply })
+      .post("/api/post/reply/edit", { replyId: replyId, reply: editedReply })
       .then(() => {
         const newIsEdit = isEdit.map(() => {
           return false;
@@ -63,7 +63,10 @@ export default function Reply({
   const handleDelete = (replyId: number) => {
     const yesDelete = confirm("정말 삭제하시겠습니까?");
     if (yesDelete) {
-      axios.post("/post/delete/reply", { replyId: replyId, postId: postId });
+      axios.post("/api/post/reply/delete", {
+        replyId: replyId,
+        postId: postId,
+      });
       setReplyLength(replyLength - 1);
       setHeight(height - 63); // 이 부분 다시 체크 필요
     }
