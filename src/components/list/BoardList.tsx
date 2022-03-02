@@ -36,7 +36,7 @@ export default function BoardList({ ctg, isSelect, setIsSelect }: any) {
     // page, ctg, orderType은 기본값이 필요함.
     // searchText가 ''일 때는 searchType과 searchText는 기본값 필요X
     axios
-      .post("/post/list", {
+      .post("/api/post/list", {
         category: ctg
           ? ctg
           : router.pathname === "/community/freelist"

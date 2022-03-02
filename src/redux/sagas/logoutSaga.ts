@@ -2,7 +2,7 @@ import axios from "axios";
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 
 function logout() {
-  const res: any = axios.get("/auth/logout");
+  const res: any = axios.get("/api/auth/logout");
   return res;
 }
 
