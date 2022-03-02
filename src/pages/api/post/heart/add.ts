@@ -1,18 +1,15 @@
-import mysql from "mysql";
-import dotenv from "dotenv";
+import exQuery from "db/db";
 
-dotenv.config();
-
-interface mysqlOptionsType {
-  host: any;
-  port: any;
-  database: any;
-  user: any;
-  password: any;
-}
-
-export default (req: any, res: any) => {
-  const mysqlOptions: mysqlOptionsType = {
+export default async (req: any, res: any) => {
+  await exQuery("update post set heart = heart + 1 where id = ? ", [
+    req.body.postId,
+  ]);
+  const rows: any = await exQuery(
+    "insert into heart(nickname, post_id) values(?,?)",
+    [req.body.nickname, req.body.postId],
+  );
+  res.send({ isHeart: true });
+  /*const mysqlOptions: mysqlOptionsType = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     database: process.env.DB_DATABASE,
@@ -39,5 +36,5 @@ export default (req: any, res: any) => {
         res.send({ isHeart: true });
       }
     },
-  );
+  );*/
 };

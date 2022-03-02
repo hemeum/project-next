@@ -52,7 +52,7 @@ const app = next({ dev });
 
 const handle = app.getRequestHandler();
 
-app.prepare().then(() => {
+/*app.prepare().then(() => {
   const server = express();
 
   // 미들웨어
@@ -157,4 +157,4 @@ app.prepare().then(() => {
   server.listen(3000, () =>
     console.log(`next+express front on : localhost:3000`),
   );
-});
+});*/

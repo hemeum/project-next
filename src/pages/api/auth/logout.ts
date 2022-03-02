@@ -1,18 +1,7 @@
-import mysql from "mysql";
-import dotenv from "dotenv";
-import bcrypt from "bcrypt";
-
-const saltRounds = 10;
-
-interface mysqlOptionsType {
-  host: any;
-  port: any;
-  database: any;
-  user: any;
-  password: any;
-}
-export default (req: any, res: any) => {
-  dotenv.config();
+import exQuery from "db/db";
+export default async (req: any, res: any) => {
+  res.clearCookie("token").send("로그아웃");
+  /*dotenv.config();
   const mysqlOptions: mysqlOptionsType = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -28,5 +17,5 @@ export default (req: any, res: any) => {
   }, 5000);
 
   console.log("로그아웃");
-  res.clearCookie("token").send("로그아웃");
+  res.clearCookie("token").send("로그아웃");*/
 };

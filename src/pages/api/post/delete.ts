@@ -1,18 +1,11 @@
-import mysql from "mysql";
-import dotenv from "dotenv";
+import exQuery from "db/db";
 
-dotenv.config();
-
-interface mysqlOptionsType {
-  host: any;
-  port: any;
-  database: any;
-  user: any;
-  password: any;
-}
-
-export default (req: any, res: any) => {
-  const mysqlOptions: mysqlOptionsType = {
+export default async (req: any, res: any) => {
+  await exQuery("delete from post where id = ?", [req.body.postId]);
+  await exQuery("delete from reply where post_id = ?", [req.body.postId]);
+  await exQuery("delete from heart where post_id = ?", [req.body.postId]);
+  res.end();
+  /*const mysqlOptions: mysqlOptionsType = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     database: process.env.DB_DATABASE,
@@ -29,5 +22,5 @@ export default (req: any, res: any) => {
   connection.query("delete from post where id = ?", [req.body.postId]);
   connection.query("delete from reply where post_id = ?", [req.body.postId]);
   connection.query("delete from heart where post_id = ?", [req.body.postId]);
-  res.end();
+  res.end();*/
 };

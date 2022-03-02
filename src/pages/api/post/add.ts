@@ -1,18 +1,14 @@
-import mysql from "mysql";
-import dotenv from "dotenv";
+import exQuery from "db/db";
 
-dotenv.config();
-
-interface mysqlOptionsType {
-  host: any;
-  port: any;
-  database: any;
-  user: any;
-  password: any;
-}
-
-export default (req: any, res: any) => {
-  const mysqlOptions: mysqlOptionsType = {
+export default async (req: any, res: any) => {
+  const { nickname, category, title, content } = req.body;
+  const rows: any = await exQuery(
+    "insert into post(nickname, category, title, content, date) values(?,?,?,?,NOW())",
+    [nickname, category, title, content],
+  );
+  const postId = rows.insertId;
+  res.send({ postId: postId });
+  /*const mysqlOptions: mysqlOptionsType = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     database: process.env.DB_DATABASE,
@@ -38,5 +34,5 @@ export default (req: any, res: any) => {
         res.send({ postId: postId });
       }
     },
-  );
+  );*/
 };

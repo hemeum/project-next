@@ -11,9 +11,10 @@ const db = mysql({
   },
 });
 
-export default async function exQuery({ qeury, values }: any) {
+export default async function exQuery(query: any, values: any) {
   try {
-    const results = await db.query(qeury, values);
+    //const results = await db.query(qeury, values);
+    const results = await db.query(query, values);
     await db.end();
     return results;
   } catch (error) {

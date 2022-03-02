@@ -1,18 +1,12 @@
-import mysql from "mysql";
-import dotenv from "dotenv";
+import exQuery from "db/db";
 
-dotenv.config();
-
-interface mysqlOptionsType {
-  host: any;
-  port: any;
-  database: any;
-  user: any;
-  password: any;
-}
-
-export default (req: any, res: any) => {
-  const mysqlOptions: mysqlOptionsType = {
+export default async (req: any, res: any) => {
+  const rows: any = await exQuery("update reply set reply = ? where id = ?", [
+    req.body.reply,
+    req.body.replyId,
+  ]);
+  res.end();
+  /*const mysqlOptions: mysqlOptionsType = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     database: process.env.DB_DATABASE,
@@ -36,5 +30,5 @@ export default (req: any, res: any) => {
         res.end();
       }
     },
-  );
+  );*/
 };

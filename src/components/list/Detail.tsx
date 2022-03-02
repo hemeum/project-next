@@ -50,8 +50,8 @@ export default function Detail() {
 
   useEffect(() => {
     axios.post("/api/post/detail", { postId: postId }).then((res) => {
-      const date = moment(res.data.date).format("YYYY년 M월 D일 HH:mm");
-      res.data.date = date;
+      /*const date = moment(res.data.date).format("YYYY년 M월 D일 HH:mm");
+      res.data.date = date;*/
       setDetail(res.data);
       setReplyLength(res.data.reply);
       setHeartLeng(res.data.heart);
@@ -164,6 +164,11 @@ export default function Detail() {
       });
   }, [isHeart, postId]);
 
+  const changeDate = (detailDate: any) => {
+    const date = moment(detailDate).format("YYYY년 M월 D일 HH:mm");
+    return date;
+  };
+
   return (
     <>
       <Wrap height={height}>
@@ -173,7 +178,7 @@ export default function Detail() {
           <Content>
             <Text>
               <h3>{detail.title}</h3>
-              <p>{detail.date}</p>
+              <p>{changeDate(detail.date)}</p>
               <p>{detail.content}</p>
 
               {detail.nickname === nickname ? (

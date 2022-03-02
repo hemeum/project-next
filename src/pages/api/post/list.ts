@@ -1,37 +1,26 @@
-import mysql from "mysql";
-import dotenv from "dotenv";
 import listSearch from "./../../../../modules/listSearch";
 import exQuery from "db/db";
 
-dotenv.config();
-
-interface mysqlOptionsType {
-  host: any;
-  port: any;
-  database: any;
-  user: any;
-  password: any;
-}
-
 export default async (req: any, res: any) => {
-  const result: any = await exQuery({
-    query: `select * from post where category = ? order by ${
+  const rows: any = await exQuery(
+    `select * from post where category = ? order by ${
       req.body.orderType === "최신순" ? "id desc" : "heart desc, id desc"
     }`,
-    value: [req.body.category],
-  });
-  let allListLength = Number(result.length);
+    [req.body.category],
+  );
+
+  let allListLength = Number(rows.length);
   let searchType = req.body.searchType;
   let searchText = req.body.searchText;
   let page = req.body.pageNumber;
-  let spliceRows = [...result].splice(0, 10 * page);
+  let spliceRows = [...rows].splice(0, 10 * page);
   if (page === 1) {
     if (!searchText || searchText.length === 0) {
       // 검색하지 않았을 때
       await res.send({ list: spliceRows, leng: allListLength });
     } else {
       // 검색했을 때
-      let sendItem = listSearch(searchType, [...result], searchText, page);
+      let sendItem = listSearch(searchType, [...rows], searchText, page);
       await res.send(sendItem);
     }
   } else {
@@ -50,7 +39,7 @@ export default async (req: any, res: any) => {
       });
     } else {
       // 검색했을 때
-      let sendItem = listSearch(searchType, [...result], searchText, page);
+      let sendItem = listSearch(searchType, [...rows], searchText, page);
       await res.send(sendItem);
     }
   }
