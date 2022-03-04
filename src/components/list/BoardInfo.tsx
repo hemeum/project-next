@@ -105,11 +105,11 @@ export default function BoardInfo({
               <p>{nickname}</p>
             </div>
             <div>
-              <i aria-hidden className="fa-solid fa-heart"></i>
+              <i aria-hidden className="far fa-heart"></i>
               <p>{heart}</p>
             </div>
             <div>
-              <i aria-hidden className="fa-solid fa-eye"></i>
+              <i aria-hidden className="far fa-eye"></i>
               <p>{view}</p>
             </div>
             <p>{date}</p>
@@ -165,7 +165,7 @@ const Info = styled.li`
     :nth-of-type(3) {
       width: 60px;
       i {
-        margin-right: 10px;
+        margin-right: 5px;
         color: lightgray;
       }
       color: gray;

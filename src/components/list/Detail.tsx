@@ -25,8 +25,6 @@ export default function Detail() {
   const postId = router.query.id;
   const page = router.query.page;
 
-  console.log(ctg);
-
   const mainRef: any = useRef();
   const replyRef: any = useRef();
 
@@ -48,7 +46,7 @@ export default function Detail() {
 
   useEffect(() => {
     setHeight(mainRef.current.clientHeight);
-  }, [detail, postId, height, replyLength]);
+  }, [detail, postId, replyLength]); // height추가할수도
 
   useEffect(() => {
     axios.post("/api/post/detail", { postId: postId }).then((res) => {
@@ -197,7 +195,7 @@ export default function Detail() {
                 <HeartBox>
                   <I
                     aria-hidden
-                    className="fa-solid fa-heart"
+                    className="far fa-heart"
                     onClick={handleHeart}
                     isHeart={isHeart}
                   ></I>

@@ -121,14 +121,14 @@ export default function BoardControll({ pageNumbers, page }: any) {
       <LeftI
         num={pageNumbers[0]}
         aria-hidden
-        className="fa-solid fa-angle-left"
+        className="far fa-caret-square-left"
         onClick={handleLeftArrowList}
       ></LeftI>
       <div>{numbers}</div>
       <RightI
         num={pageNumbers.length}
         aria-hidden
-        className="fa-solid fa-angle-right"
+        className="far fa-caret-square-right"
         onClick={handleRightArrowList}
       ></RightI>
     </Controll>
@@ -147,10 +147,10 @@ const Controll = styled.div<{ lengs: number }>`
   i {
     width: 40px;
     height: 40px;
-    border: 1px solid lightgray;
+
     line-height: 40px;
     color: lightgray;
-    font-size: 20px;
+    font-size: 30px;
     transition: all 0.2s;
   }
   div {
@@ -183,9 +183,7 @@ const Controll = styled.div<{ lengs: number }>`
 const LeftI = styled.i<{ num: number }>`
   :hover {
     ${({ num }) => {
-      return num === 1
-        ? undefined
-        : "color:black; border:1px solid black; cursor: pointer";
+      return num === 1 ? undefined : "color:black;  cursor: pointer";
     }};
   }
 `;
@@ -193,9 +191,7 @@ const LeftI = styled.i<{ num: number }>`
 const RightI = styled.i<{ num: number }>`
   :hover {
     ${({ num }) => {
-      return num === 10
-        ? "color:black; border:1px solid black; cursor:pointer"
-        : undefined;
+      return num === 10 ? "color:black;  cursor:pointer" : undefined;
     }};
   }
 `;

@@ -22,14 +22,21 @@ export default function Reply({
   const [editToggle, setEditToggle] = useState(false); // toggle
 
   useEffect(() => {
+    // cleanup 함수를 사용하면 re-render → 이전 useEffect cleanup → 현재 useEffect 실행
+    let clean = true;
     axios.post("/api/post/reply", { postId: postId }).then((res) => {
-      setReplys(res.data);
-      setReplyLength(res.data.length);
-      const isEditArr = res.data.map(() => {
-        return false;
-      });
-      setIsEdit(isEditArr);
+      if (clean) {
+        setReplys(res.data);
+        setReplyLength(res.data.length);
+        const isEditArr = res.data.map(() => {
+          return false;
+        });
+        setIsEdit(isEditArr);
+      }
     });
+    return () => {
+      clean = false;
+    };
   }, [replyLength, postId, height, editToggle]);
 
   const handleEdit = (reply: string, index: number) => {

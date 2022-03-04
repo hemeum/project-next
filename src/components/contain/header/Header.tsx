@@ -196,8 +196,15 @@ function Header() {
       ],
       url: {
         pathname: "/news/noticelist",
-        query: { ctg: "공지사항", page: 1 },
+        query: {
+          ctg: "공지사항",
+          page: 1,
+          searchType: "",
+          searchText: "",
+          orderType: "최신순",
+        },
       },
+      as: "/news/noticelist",
     },
     {
       id: 2,
@@ -208,6 +215,7 @@ function Header() {
         { id: 12, item: "클래스", url: "/", as: "/" },
       ],
       url: "/",
+      as: "/",
     },
     {
       id: 3,
@@ -218,6 +226,7 @@ function Header() {
         { id: 15, item: "콘텐츠", url: "/", as: "/" },
       ],
       url: "/",
+      as: "/",
     },
     {
       id: 4,
@@ -246,8 +255,12 @@ function Header() {
         query: {
           ctg: "자유게시판",
           page: 1,
+          searchType: "",
+          searchText: "",
+          orderType: "최신순",
         },
       },
+      as: "/community/freelist",
     },
     {
       id: 5,
@@ -258,6 +271,7 @@ function Header() {
         { id: 21, item: "OST", url: "/", as: "/" },
       ],
       url: "/",
+      as: "/",
     },
     {
       id: 6,
@@ -268,6 +282,7 @@ function Header() {
         { id: 24, item: "보안서비스", url: "/", as: "/" },
       ],
       url: "/",
+      as: "/",
     },
   ];
 
@@ -288,7 +303,7 @@ function Header() {
         onMouseLeave={handleLeaveBorder}
         onClick={handleHeaderBg}
       >
-        <Link href={m.url}>
+        <Link href={m.url} as={m.as}>
           <a onClick={handleHeaderBg} ref={menuRefArr[i]}>
             {m.menu}
           </a>
@@ -348,7 +363,7 @@ function Header() {
           </Prac>
         </InnerL>
         <InnerR>
-          {!isLogin ? (
+          {!isLogin || nickname === "" ? (
             <Link href="/user/login">
               <a
                 onMouseEnter={(e) => {
@@ -362,7 +377,7 @@ function Header() {
               </a>
             </Link>
           ) : (
-            <Link href="/">
+            <Link href="#">
               <a
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = "red";

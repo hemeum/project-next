@@ -103,11 +103,7 @@ export default function BoardList({ ctg, isSelect, setIsSelect }: any) {
       <BoardSearch isSelect={isSelect} setIsSelect={setIsSelect}></BoardSearch>
       <ListTop>
         <div>
-          {select === "최신순" ? (
-            <i aria-hidden className="fa-solid fa-check active"></i>
-          ) : (
-            <i aria-hidden className="fa-solid fa-circle"></i>
-          )}
+          {select === "최신순" ? <span>✓</span> : <span>●</span>}
           <p
             className="active"
             onClick={() => {
@@ -128,11 +124,7 @@ export default function BoardList({ ctg, isSelect, setIsSelect }: any) {
           </p>
         </div>
         <div>
-          {select === "좋아요순" ? (
-            <i aria-hidden className="fa-solid fa-check active"></i>
-          ) : (
-            <i aria-hidden className="fa-solid fa-circle"></i>
-          )}
+          {select === "좋아요순" ? <span>✓</span> : <span>●</span>}
           <p
             onClick={() => {
               router.push({
@@ -206,7 +198,11 @@ const ListTop = styled.div`
     display: flex;
     align-items: center;
     margin-right: 30px;
-    color: gray;
+    color: black;
+    span {
+      color: black;
+      margin-right: 5px;
+    }
   }
   i {
     font-size: 1px;

@@ -7,7 +7,7 @@ export default function TitleTop() {
     <Top>
       <h2>{router.query.ctg}</h2>
       <GoBack>
-        <i aria-hidden className="fa-solid fa-bars"></i>
+        <i aria-hidden className="fa fa-align-justify"></i>
         <p>목록가기</p>
       </GoBack>
     </Top>

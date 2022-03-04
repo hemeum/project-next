@@ -28,7 +28,7 @@ export default (req: any, res: any) => {
   );
 
   console.log(req.cookies);
-  if (req.cookies.token) {
+  if (req.cookies.token !== "false" && req.cookies.token) {
     passport.authenticate(
       "jwt",
       { session: false },
