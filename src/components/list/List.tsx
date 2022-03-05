@@ -5,7 +5,7 @@ import Footer from "../contain/footer/Footer";
 import BoardList from "./BoardList";
 import PageTop from "./PageTop";
 
-export default function List({ ctg }: any) {
+export default function List({ ctg, list, pageNumbers }: any) {
   const [isSelect, setIsSelect] = useState(false);
   return (
     <>
@@ -20,7 +20,13 @@ export default function List({ ctg }: any) {
         <PageTop></PageTop>
 
         <ListMain>
-          <BoardList ctg={ctg} isSelect={isSelect} setIsSelect={setIsSelect} />
+          <BoardList
+            ctg={ctg}
+            isSelect={isSelect}
+            setIsSelect={setIsSelect}
+            list={list}
+            pageNumbers={pageNumbers}
+          />
         </ListMain>
       </Wrap>
       <Footer></Footer>

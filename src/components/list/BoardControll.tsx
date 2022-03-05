@@ -37,7 +37,11 @@ export default function BoardControll({ pageNumbers, page }: any) {
     router.push({
       pathname: "/community/freelist",
       query: {
-        ctg: ctg,
+        ctg: ctg
+          ? ctg
+          : router.pathname === "/community/freelist"
+          ? "자유게시판"
+          : "공지사항",
         page: Number(e.target.innerText),
         searchText: searchText ? searchText : "",
         searchType: searchType ? searchType : "",
@@ -54,7 +58,11 @@ export default function BoardControll({ pageNumbers, page }: any) {
     router.push({
       pathname: "/community/freelist",
       query: {
-        ctg: ctg,
+        ctg: ctg
+          ? ctg
+          : router.pathname === "/community/freelist"
+          ? "자유게시판"
+          : "공지사항",
         page: Number(pageNumbers[0] - 1),
         searchText: searchText ? searchText : "",
         searchType: searchType ? searchType : "",
@@ -71,7 +79,11 @@ export default function BoardControll({ pageNumbers, page }: any) {
     router.push({
       pathname: "/community/freelist",
       query: {
-        ctg: ctg,
+        ctg: ctg
+          ? ctg
+          : router.pathname === "/community/freelist"
+          ? "자유게시판"
+          : "공지사항",
         page: Number(pageNumbers[pageNumbers.length - 1] + 1),
         searchText: searchText ? searchText : "",
         searchType: searchType ? searchType : "",

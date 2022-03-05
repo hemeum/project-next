@@ -10,7 +10,13 @@ import BoardInfo from "./BoardInfo";
 import { InfoType } from "./BoardInfo";
 import BoardSearch from "./BoardSearch";
 
-export default function BoardList({ ctg, isSelect, setIsSelect }: any) {
+export default function BoardList({
+  ctg,
+  isSelect,
+  setIsSelect,
+  list,
+  pageNumbers,
+}: any) {
   const { isLogin } = useSelector((state: any) => {
     return state.authReducer;
   });
@@ -23,10 +29,10 @@ export default function BoardList({ ctg, isSelect, setIsSelect }: any) {
 
   /* list and controll */
   const [select, setSelect] = useState("최신순");
-  const [list, setList] = useState<any>([]);
-  const [pageNumbers, setPageNumbers] = useState<any>([]); // 페이지들
+  //const [list, setList] = useState<any>([]);
+  //const [pageNumbers, setPageNumbers] = useState<any>([]); // 페이지들
 
-  const getList = (
+  /*const getList = (
     page: number,
     index: number,
     searchType?: string | string[],
@@ -63,7 +69,7 @@ export default function BoardList({ ctg, isSelect, setIsSelect }: any) {
   useEffect(() => {
     let index = (Math.ceil(page / 10) - 1) * 10;
     getList(page, index, searchType, searchText, orderType);
-  }, [ctg, page, searchText, searchType, orderType]);
+  }, [ctg, page, searchText, searchType, orderType]);*/
 
   const handleWrite = () => {
     if (isLogin) {

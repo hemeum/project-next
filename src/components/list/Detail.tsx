@@ -12,7 +12,7 @@ import TitleTop from "./TitleTop";
 import BoardList from "./BoardList";
 import Reply from "./Reply";
 
-export default function Detail() {
+export default function Detail({ list, pageNumbers, detail }: any) {
   const isLogin = useSelector((state: any) => {
     return state.authReducer.isLogin;
   });
@@ -34,7 +34,7 @@ export default function Detail() {
   const [reply, setReply] = useState("");
   const [replyLength, setReplyLength] = useState(0);
   const [height, setHeight] = useState(200);
-  const [detail, setDetail] = useState({
+  /*const [detail, setDetail] = useState({
     title: "",
     content: "",
     nickname: "",
@@ -42,7 +42,7 @@ export default function Detail() {
     view: 0,
     reply: 0,
     date: "",
-  });
+  });*/
 
   useEffect(() => {
     setHeight(mainRef.current.clientHeight);
@@ -50,9 +50,7 @@ export default function Detail() {
 
   useEffect(() => {
     axios.post("/api/post/detail", { postId: postId }).then((res) => {
-      /*const date = moment(res.data.date).format("YYYY년 M월 D일 HH:mm");
-      res.data.date = date;*/
-      setDetail(res.data);
+      //setDetail(res.data);
       setReplyLength(res.data.reply);
       setHeartLeng(res.data.heart);
     });
@@ -265,6 +263,8 @@ export default function Detail() {
             detailToggle={detailToggle}
             setDetailToggle={setDetailToggle}
             page={page}
+            list={list}
+            pageNumbers={pageNumbers}
           ></BoardList>
         </DetailMain>
       </Wrap>
