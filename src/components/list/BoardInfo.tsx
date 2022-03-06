@@ -97,8 +97,7 @@ export default function BoardInfo({
           <>
             <p>
               <span>{title}</span>
-              <span>({reply})</span>
-              <span>N</span>
+              <span>{Number(reply) === 0 ? undefined : `(${reply})`}</span>
             </p>
             <div>
               <img src="/img/logo-loa.png" alt="프로필 이미지" />

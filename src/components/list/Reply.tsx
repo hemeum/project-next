@@ -28,6 +28,7 @@ export default function Reply({
       if (clean) {
         setReplys(res.data);
         setReplyLength(res.data.length);
+        setHeight(height + res.data.length * 63);
         const isEditArr = res.data.map(() => {
           return false;
         });
@@ -37,7 +38,7 @@ export default function Reply({
     return () => {
       clean = false;
     };
-  }, [replyLength, postId, height, editToggle]);
+  }, [replyLength, postId, editToggle]);
 
   const handleEdit = (reply: string, index: number) => {
     const newIsEdit = isEdit.map(() => {
