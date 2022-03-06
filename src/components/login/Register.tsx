@@ -27,9 +27,9 @@ function Register() {
   const handleResiter = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     axios
-      .post("/apit/auth/register", {
+      .post("/api/auth/register", {
         username: username.inputValue,
-        pwd: pwd.inputValue,
+        password: pwd.inputValue,
         nickname: nickname.inputValue,
       })
       .then(() => {
