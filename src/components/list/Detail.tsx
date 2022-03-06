@@ -46,7 +46,11 @@ export default function Detail({ list, pageNumbers, detail }: any) {
 
   useEffect(() => {
     setHeight(mainRef.current.clientHeight);
-  }, [detail, postId, replyLength]); // height추가할수도
+  }, [postId, replyLength, height]);
+
+  useEffect(() => {
+    setHeartLeng(detail.heart);
+  }, []);
 
   useEffect(() => {
     axios.post("/api/post/detail", { postId: postId }).then((res) => {
@@ -54,7 +58,7 @@ export default function Detail({ list, pageNumbers, detail }: any) {
       setReplyLength(res.data.reply);
       setHeartLeng(res.data.heart);
     });
-  }, [postId, height, heartLeng, detailToggle]);
+  }, [postId, heartLeng, detailToggle, height]);
 
   const submitReply = debounce(() => {
     if (isLogin) {
@@ -160,7 +164,7 @@ export default function Detail({ list, pageNumbers, detail }: any) {
       .then((res) => {
         setIsHeart(res.data.isHeart);
       });
-  }, [isHeart, postId]);
+  }, [isHeart, postId, nickname]);
 
   const changeDate = (detailDate: any) => {
     const date = moment(detailDate).format("YYYY년 M월 D일 HH:mm");
@@ -197,7 +201,7 @@ export default function Detail({ list, pageNumbers, detail }: any) {
                     onClick={handleHeart}
                     isHeart={isHeart}
                   ></I>
-                  <span>{detail.heart}</span>
+                  <span>{heartLeng}</span>
                 </HeartBox>
               )}
 
@@ -249,7 +253,7 @@ export default function Detail({ list, pageNumbers, detail }: any) {
                   댓글 <span>{replyLength}</span>
                 </p>
                 <p>
-                  좋아요 <span>{detail.heart}</span>
+                  좋아요 <span>{heartLeng}</span>
                 </p>
                 <p>
                   조회수 <span>{detail.view}</span>
