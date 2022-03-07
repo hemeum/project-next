@@ -5,7 +5,11 @@ import { useRouter } from "next/router";
 
 export default function BoardSearch({ isSelect, setIsSelect }: any) {
   const router = useRouter();
-  const ctg = router.query.ctg;
+  const ctg = router.query.ctg
+    ? router.query.ctg
+    : router.pathname === "/community/freelist"
+    ? "자유게시판"
+    : "공지사항";
   const orderType = router.query.orderType;
 
   const [searchType, setSearchType] = useState("제목");
@@ -41,7 +45,30 @@ export default function BoardSearch({ isSelect, setIsSelect }: any) {
               isSelect={isSelect}
             ></I>
           </div>
-          <div>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (searchText.length < 2) {
+                window.alert("최소 두 글자 이상 입력해주세요.");
+                return;
+              } else {
+                router.push({
+                  pathname: "/community/freelist",
+                  query: {
+                    ctg: ctg,
+                    page: 1,
+                    searchText: searchText,
+                    searchType: searchType,
+                    orderType:
+                      orderType === "최신순" || !orderType
+                        ? "최신순"
+                        : "좋아요순",
+                  },
+                });
+                setSearchText("");
+              }
+            }}
+          >
             <input
               type="text"
               placeholder="검색어를 입력해주세요."
@@ -75,7 +102,7 @@ export default function BoardSearch({ isSelect, setIsSelect }: any) {
                 }
               }}
             ></i>
-          </div>
+          </form>
         </div>
       </MainTop>
     </>
@@ -90,7 +117,8 @@ const MainTop = styled.div<{ isSelect: boolean }>`
   div {
     display: flex;
     align-items: center;
-    div {
+    div,
+    form {
       position: relative;
       height: 50px;
       font-size: 14px;

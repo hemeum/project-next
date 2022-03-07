@@ -1,5 +1,6 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Editor } from "@toast-ui/react-editor";
+import { useRouter } from "next/router";
 
 import "@toast-ui/editor/dist/toastui-editor.css";
 //toast-ui 3.0이 출시되면서 codemirror 의존성 제거됌.
@@ -16,6 +17,13 @@ function PostEditor({
   const handleEdit = () => {
     setContent(editorRef.current.getInstance().getMarkdown());
   };
+
+  useEffect(() => {
+    setContent(value);
+  }, []);
+
+  const router = useRouter();
+  const value = router.query.value ? router.query.value : "";
   return (
     <Editor
       previewStyle="vertical"
@@ -25,7 +33,7 @@ function PostEditor({
       placeholder="내용을 입력해주세요."
       onChange={handleEdit}
       ref={editorRef}
-      initialValue={content}
+      initialValue={String(value)}
     ></Editor>
   );
 }
