@@ -146,6 +146,7 @@ export default function Reply({
 }
 
 const Chat = styled.li`
+  white-space: pre-wrap;
   display: flex;
   align-items: flex-start;
   width: 980px;

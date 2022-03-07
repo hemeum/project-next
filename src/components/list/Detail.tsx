@@ -102,12 +102,15 @@ export default function Detail({ list, pageNumbers, detail }: any) {
 
   const handleHeart = debounce(() => {
     if (isLogin) {
+      // setTimeout쓰자
       if (!isHeart) {
         axios
           .post("/api/post/heart/add", { postId: postId, nickname: nickname })
           .then((res) => {
             setIsHeart(res.data.isHeart);
-            setHeartLeng(heartLeng + 1);
+            if (!isHeart) {
+              setHeartLeng(heartLeng + 1);
+            }
           });
       } else {
         axios
@@ -117,7 +120,9 @@ export default function Detail({ list, pageNumbers, detail }: any) {
           })
           .then((res) => {
             setIsHeart(res.data.isHeart);
-            setHeartLeng(heartLeng - 1);
+            if (isHeart) {
+              setHeartLeng(heartLeng - 1);
+            }
           });
       }
     } else {
@@ -209,18 +214,20 @@ export default function Detail({ list, pageNumbers, detail }: any) {
                 <h3>
                   댓글<span>{replyLength}</span>
                 </h3>
-                <textarea
-                  placeholder="저작권 침해는 제한됩니다."
-                  value={reply}
-                  onChange={handleReply}
-                  ref={replyRef}
-                ></textarea>
-                <div>
-                  <p>{reply.length === 0 ? 0 : reply.length} / 200</p>
-                  <button type="button" onClick={submitReply}>
-                    등록
-                  </button>
-                </div>
+                <form>
+                  <textarea
+                    placeholder="저작권 침해는 제한됩니다."
+                    value={reply}
+                    onChange={handleReply}
+                    ref={replyRef}
+                  ></textarea>
+                  <div>
+                    <p>{reply.length === 0 ? 0 : reply.length} / 200</p>
+                    <button type="button" onClick={submitReply}>
+                      등록
+                    </button>
+                  </div>
+                </form>
                 {replyLength === 0 ? undefined : (
                   <ul>
                     <Reply
@@ -332,7 +339,7 @@ const Text = styled.div`
         margin-left: 10px;
         font-size: 25px;
       }
-      > textarea {
+      form > textarea {
         width: 980px;
         height: 100px;
         margin-right: 50px;
@@ -345,7 +352,7 @@ const Text = styled.div`
           outline: none;
         }
       }
-      > div {
+      form > div {
         display: flex;
         justify-content: space-between;
         align-items: center;
