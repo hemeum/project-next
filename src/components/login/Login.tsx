@@ -19,25 +19,6 @@ function Login() {
   const handleLogin = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (username.inputValue.length !== 0 && pwd.inputValue.length !== 0) {
-      /*axios
-        .post("/auth/login", {
-          username: username.inputValue,
-          password: pwd.inputValue,
-        })
-        .then((res) => {
-          // 로그인 성공
-          // '/'로 이동하면서 query string에 nickname data를 전달, 그냥 전달하면 url에 nickname이 쿼리스트링으로 보임. url에서 쿼리스트링을 감추기 위해 2번째 인자로 '/'
-          // setIsLogin(res.data.isLogin)
-          Router.push(
-            { pathname: "/", query: { nickname: res.data.nickname } },
-            "/",
-          );
-        })
-        .catch((err) => {
-          // 로그인 실패
-          window.alert(err.response.data);
-        });*/
-
       dispatch({
         type: "LOGIN_REQUEST",
         payload: { username: username.inputValue, password: pwd.inputValue },

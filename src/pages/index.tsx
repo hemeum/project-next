@@ -15,15 +15,6 @@ const Home: NextPage = ({ youtubeList }: any) => {
   );
 };
 
-/*
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store: any): any =>
-    async () => {
-      store.dispatch({ type: "YOUTUBE_REQUEST" });
-    },
-);
-*/
-
 export async function getServerSideProps() {
   const res = await axios.get(
     `https://www.googleapis.com/youtube/v3/playlistItems?playlistId=PLXJUV6UcSL2y6LQ0twqDA7fC4ybZtRB9O&part=snippet,id&order=date&maxResults=24&channelID=UCL3gnarNIeI_M0cFxjNYdAA&key=${process.env.YOUTUBE_API_KEY}`,

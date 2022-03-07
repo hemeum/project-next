@@ -27,49 +27,7 @@ export default function BoardList({
   const page: any = Number(router.query.page);
   const orderType = router.query.orderType;
 
-  /* list and controll */
   const [select, setSelect] = useState("최신순");
-  //const [list, setList] = useState<any>([]);
-  //const [pageNumbers, setPageNumbers] = useState<any>([]); // 페이지들
-
-  /*const getList = (
-    page: number,
-    index: number,
-    searchType?: string | string[],
-    searchText?: string | string[],
-    orderType?: string | string[],
-  ) => {
-    // page, ctg, orderType은 기본값이 필요함.
-    // searchText가 ''일 때는 searchType과 searchText는 기본값 필요X
-    axios
-      .post("/api/post/list", {
-        category: ctg
-          ? ctg
-          : router.pathname === "/community/freelist"
-          ? "자유게시판"
-          : "공지사항",
-        pageNumber: page ? page : 1,
-        searchType: searchType,
-        searchText: searchText,
-        orderType: orderType === "최신순" || !orderType ? "최신순" : "좋아요순",
-      })
-      .then((res) => {
-        const leng = res.data.leng;
-        const arr: any = [];
-        for (let i = 1; i <= Math.ceil(leng / 10); i++) {
-          arr.push(i);
-        }
-        const newArr = [...arr];
-
-        setPageNumbers(newArr.splice(index, 10));
-        setList(res.data.list);
-      });
-  };
-
-  useEffect(() => {
-    let index = (Math.ceil(page / 10) - 1) * 10;
-    getList(page, index, searchType, searchText, orderType);
-  }, [ctg, page, searchText, searchType, orderType]);*/
 
   const handleWrite = () => {
     if (isLogin) {

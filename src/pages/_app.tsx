@@ -12,7 +12,6 @@ const store = require("src/redux/store");
 export const wrapper = createWrapper(store);
 
 function MyApp({ Component, pageProps }: AppProps) {
-  // _app.tsx가 CRA의 index.js와 같은 역할. '/'역할을 함.
   const router = useRouter();
   return (
     <>
