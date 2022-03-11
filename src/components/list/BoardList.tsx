@@ -36,7 +36,11 @@ export default function BoardList({
   const [select, setSelect] = useState("최신순");
 
   useEffect(() => {
-    setSelect(String(orderType));
+    if (orderType) {
+      setSelect(String(orderType));
+    } else {
+      setSelect("최신순");
+    }
   }, [orderType]);
 
   const handleWrite = () => {
