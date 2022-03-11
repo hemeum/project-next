@@ -2,7 +2,6 @@ import Router, { useRouter } from "next/router";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
 import moment from "moment";
 
 import BoardControll from "./BoardControll";
@@ -10,24 +9,35 @@ import BoardInfo from "./BoardInfo";
 import { InfoType } from "./BoardInfo";
 import BoardSearch from "./BoardSearch";
 
+interface propsType {
+  isSelect: boolean;
+  setIsSelect: (isSelect: boolean) => void;
+  list: [];
+  pageNumbers: Number[];
+}
+
 export default function BoardList({
-  ctg,
   isSelect,
   setIsSelect,
   list,
   pageNumbers,
-}: any) {
+}: propsType) {
   const { isLogin } = useSelector((state: any) => {
     return state.authReducer;
   });
 
   const router = useRouter();
+  const ctg = router.query.ctg;
   const searchText = router.query.searchText;
   const searchType: any = router.query.searchType;
   const page: any = Number(router.query.page);
   const orderType = router.query.orderType;
 
   const [select, setSelect] = useState("최신순");
+
+  useEffect(() => {
+    setSelect(String(orderType));
+  }, [orderType]);
 
   const handleWrite = () => {
     if (isLogin) {

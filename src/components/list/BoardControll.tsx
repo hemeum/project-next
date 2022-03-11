@@ -1,4 +1,3 @@
-import axios from "axios";
 import styled from "styled-components";
 import { useRef, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -33,21 +32,25 @@ export default function BoardControll({ pageNumbers, page }: any) {
   const searchText = router.query.searchText;
   const orderType = router.query.orderType;
 
-  const handleList = (e: any) => {
+  const handleRouter = (page: Number) => {
     router.push({
-      pathname: "/community/freelist",
+      pathname: router.pathname,
       query: {
         ctg: ctg
           ? ctg
           : router.pathname === "/community/freelist"
           ? "자유게시판"
           : "공지사항",
-        page: Number(e.target.innerText),
+        page: Number(page),
         searchText: searchText ? searchText : "",
         searchType: searchType ? searchType : "",
         orderType: orderType === "최신순" || !orderType ? "최신순" : "좋아요순",
       },
     });
+  };
+
+  const handleList = (e: any) => {
+    handleRouter(Number(e.target.innerText));
   };
 
   const handleLeftArrowList = () => {
@@ -55,20 +58,7 @@ export default function BoardControll({ pageNumbers, page }: any) {
       return;
     }
 
-    router.push({
-      pathname: "/community/freelist",
-      query: {
-        ctg: ctg
-          ? ctg
-          : router.pathname === "/community/freelist"
-          ? "자유게시판"
-          : "공지사항",
-        page: Number(pageNumbers[0] - 1),
-        searchText: searchText ? searchText : "",
-        searchType: searchType ? searchType : "",
-        orderType: orderType === "최신순" || !orderType ? "최신순" : "좋아요순",
-      },
-    });
+    handleRouter(Number(pageNumbers[0] - 1));
   };
 
   const handleRightArrowList = () => {
@@ -76,20 +66,7 @@ export default function BoardControll({ pageNumbers, page }: any) {
       return;
     }
 
-    router.push({
-      pathname: "/community/freelist",
-      query: {
-        ctg: ctg
-          ? ctg
-          : router.pathname === "/community/freelist"
-          ? "자유게시판"
-          : "공지사항",
-        page: Number(pageNumbers[pageNumbers.length - 1] + 1),
-        searchText: searchText ? searchText : "",
-        searchType: searchType ? searchType : "",
-        orderType: orderType === "최신순" || !orderType ? "최신순" : "좋아요순",
-      },
-    });
+    handleRouter(Number(pageNumbers[pageNumbers.length - 1] + 1));
   };
 
   const numbers = pageNumbers.map((i: any, index: number) => {

@@ -9,7 +9,6 @@ import { debounce } from "lodash";
 import PageTop from "./PageTop";
 import Footer from "../contain/footer/Footer";
 import TitleTop from "./TitleTop";
-import { Router } from "express";
 
 const PostEditor = dynamic(() => import("./PostEditor"), { ssr: false });
 
@@ -36,6 +35,18 @@ export default function Write() {
     }
   }, []);
 
+  const handleRouter = (postId: string) => {
+    if (ctg === "자유게시판") {
+      router.push(
+        {
+          pathname: `/community/freelist/view/[id]`,
+          query: { ctg: ctg, postId: postId },
+        },
+        `/community/freelist/view/${postId}?ctg=${ctg}`,
+      );
+    }
+  };
+
   const handleSubmit = debounce((e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (prevTitle && prevContent) {
@@ -46,15 +57,7 @@ export default function Write() {
           content: content,
         })
         .then((res) => {
-          if (ctg === "자유게시판") {
-            router.push(
-              {
-                pathname: `/community/freelist/view/[id]`,
-                query: { ctg: ctg, postId: res.data.postId },
-              },
-              `/community/freelist/view/${res.data.postId}?ctg=${ctg}`,
-            );
-          }
+          handleRouter(res.data.postId);
         });
     } else {
       axios
@@ -65,15 +68,7 @@ export default function Write() {
           content: content,
         })
         .then((res) => {
-          if (ctg === "자유게시판") {
-            router.push(
-              {
-                pathname: `/community/freelist/view/[id]`,
-                query: { ctg: ctg, postId: res.data.postId },
-              },
-              `/community/freelist/view/${res.data.postId}?ctg=${ctg}`,
-            );
-          }
+          handleRouter(res.data.postId);
         });
     }
   }, 500);

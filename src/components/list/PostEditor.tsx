@@ -9,7 +9,7 @@ function PostEditor({
   setContent,
   content,
 }: {
-  setContent: any;
+  setContent: (value: string) => void;
   content: string;
 }) {
   const editorRef: any = useRef();
@@ -19,7 +19,7 @@ function PostEditor({
   };
 
   useEffect(() => {
-    setContent(value);
+    setContent(String(value));
   }, []);
 
   const router = useRouter();

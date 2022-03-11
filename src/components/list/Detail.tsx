@@ -12,7 +12,22 @@ import TitleTop from "./TitleTop";
 import BoardList from "./BoardList";
 import Reply from "./Reply";
 
-export default function Detail({ list, pageNumbers, detail }: any) {
+interface detailType {
+  date: string;
+  nickname: string;
+  heart: Number;
+  title: string;
+  content: string;
+  view: string;
+}
+
+interface propsType {
+  list: [];
+  pageNumbers: Number[];
+  detail: detailType;
+}
+
+export default function Detail({ list, pageNumbers, detail }: propsType) {
   const isLogin = useSelector((state: any) => {
     return state.authReducer.isLogin;
   });
@@ -28,21 +43,11 @@ export default function Detail({ list, pageNumbers, detail }: any) {
   const mainRef: any = useRef();
   const replyRef: any = useRef();
 
-  const [detailToggle, setDetailToggle] = useState(false); // detail 새로 받아오기 위한 토글
-  const [heartLeng, setHeartLeng] = useState(0);
+  const [heartLeng, setHeartLeng] = useState<Number>(0);
   const [isHeart, setIsHeart] = useState(false);
   const [reply, setReply] = useState("");
-  const [replyLength, setReplyLength] = useState(0);
-  const [height, setHeight] = useState(200);
-  /*const [detail, setDetail] = useState({
-    title: "",
-    content: "",
-    nickname: "",
-    heart: 0,
-    view: 0,
-    reply: 0,
-    date: "",
-  });*/
+  const [replyLength, setReplyLength] = useState<Number>(0);
+  const [height, setHeight] = useState<Number>(200);
 
   useEffect(() => {
     setHeight(mainRef.current.clientHeight);
@@ -58,7 +63,7 @@ export default function Detail({ list, pageNumbers, detail }: any) {
       setReplyLength(res.data.reply);
       setHeartLeng(res.data.heart);
     });
-  }, [postId, heartLeng, detailToggle, height]);
+  }, [postId, heartLeng, height]);
 
   const submitReply = debounce(() => {
     if (isLogin) {
@@ -69,9 +74,9 @@ export default function Detail({ list, pageNumbers, detail }: any) {
           postId: postId,
         })
         .then(() => {
-          setReplyLength(replyLength + 1);
+          setReplyLength(Number(replyLength) + 1);
           setReply("");
-          setHeight(height + 63);
+          setHeight(Number(height) + 63);
         });
     } else {
       const yesLogin = confirm("로그인이 필요합니다.");
@@ -109,7 +114,7 @@ export default function Detail({ list, pageNumbers, detail }: any) {
           .then((res) => {
             setIsHeart(res.data.isHeart);
             if (!isHeart) {
-              setHeartLeng(heartLeng + 1);
+              setHeartLeng(Number(heartLeng) + 1);
             }
           });
       } else {
@@ -121,7 +126,7 @@ export default function Detail({ list, pageNumbers, detail }: any) {
           .then((res) => {
             setIsHeart(res.data.isHeart);
             if (isHeart) {
-              setHeartLeng(heartLeng - 1);
+              setHeartLeng(Number(heartLeng) - 1);
             }
           });
       }
@@ -178,7 +183,7 @@ export default function Detail({ list, pageNumbers, detail }: any) {
 
   return (
     <>
-      <Wrap height={height}>
+      <Wrap height={Number(height)}>
         <PageTop></PageTop>
         <DetailMain ref={mainRef}>
           <TitleTop></TitleTop>
@@ -231,7 +236,7 @@ export default function Detail({ list, pageNumbers, detail }: any) {
                 {replyLength === 0 ? undefined : (
                   <ul>
                     <Reply
-                      postId={postId}
+                      postId={String(postId)}
                       replyLength={replyLength}
                       setReplyLength={setReplyLength}
                       height={height}
@@ -270,12 +275,10 @@ export default function Detail({ list, pageNumbers, detail }: any) {
             </Info>
           </Content>
           <BoardList
-            ctg={ctg}
-            detailToggle={detailToggle}
-            setDetailToggle={setDetailToggle}
-            page={page}
             list={list}
             pageNumbers={pageNumbers}
+            isSelect={false}
+            setIsSelect={() => {}}
           ></BoardList>
         </DetailMain>
       </Wrap>

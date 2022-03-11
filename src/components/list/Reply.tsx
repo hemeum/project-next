@@ -5,13 +5,21 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import { debounce } from "lodash";
 
+interface propsType {
+  postId: string;
+  replyLength: Number;
+  setReplyLength: (leng: Number) => void;
+  height: Number;
+  setHeight: (height: Number) => void;
+}
+
 export default function Reply({
   postId,
   replyLength,
   setReplyLength,
   height,
   setHeight,
-}: any) {
+}: propsType) {
   const nickname = useSelector((state: any) => {
     return state.authReducer.nickname;
   });
@@ -28,7 +36,7 @@ export default function Reply({
       if (clean) {
         setReplys(res.data);
         setReplyLength(res.data.length);
-        setHeight(height + res.data.length * 63);
+        setHeight(Number(height) + Number(res.data.length) * 63);
         const isEditArr = res.data.map(() => {
           return false;
         });
@@ -75,8 +83,8 @@ export default function Reply({
         replyId: replyId,
         postId: postId,
       });
-      setReplyLength(replyLength - 1);
-      setHeight(height - 63); // 이 부분 다시 체크 필요
+      setReplyLength(Number(replyLength) - 1);
+      setHeight(Number(height) - 63); // 이 부분 다시 체크 필요
     }
   };
 

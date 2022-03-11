@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { route } from "next/dist/server/router";
 
 export interface InfoType {
   key?: number;
@@ -36,38 +35,33 @@ export default function BoardInfo({
   const searchType = router.query.searchType ? router.query.searchType : "";
   const orderType = router.query.orderType ? router.query.orderType : "최신순";
 
+  const handleRouter = (pathname: string, asUrl: string) => {
+    router.push(
+      {
+        pathname: pathname,
+        query: {
+          ctg: ctg,
+          page: page,
+          searchText: searchText ? searchText : "",
+          searchType: searchType ? searchType : "",
+          orderType:
+            orderType === "최신순" || !orderType ? "최신순" : "좋아요순",
+        },
+      },
+      asUrl,
+    );
+  };
+
   const handleInfo = () => {
     axios.post("/api/post/view/add", { postId: id }).then((res) => {
       if (ctg === "공지사항") {
-        router.push(
-          {
-            pathname: "/news/noticelist/view/[id]",
-            query: {
-              ctg: ctg,
-              page: page,
-              searchText: searchText ? searchText : "",
-              searchType: searchType ? searchType : "",
-              orderType:
-                orderType === "최신순" || !orderType ? "최신순" : "좋아요순",
-            },
-          },
-          `/news/noticelist/view/${res.data.postId}?ctg=${ctg}&page=${page}&searchType=${searchType}&searchText=${searchText}&orderType=${orderType}`,
-        );
-      } else {
-        router.push(
-          {
-            pathname: "/community/freelist/view/[id]",
-            query: {
-              ctg: ctg,
-              page: page,
-              searchText: searchText ? searchText : "",
-              searchType: searchType ? searchType : "",
-              orderType:
-                orderType === "최신순" || !orderType ? "최신순" : "좋아요순",
-            },
-          },
-          `/community/freelist/view/${res.data.postId}?ctg=${ctg}&page=${page}&searchType=${searchType}&searchText=${searchText}&orderType=${orderType}`,
-        );
+        let goPathname = "/news/noticelist/view/[id]";
+        let asUrl = `/news/noticelist/view/${res.data.postId}?ctg=${ctg}&page=${page}&searchType=${searchType}&searchText=${searchText}&orderType=${orderType}`;
+        handleRouter(goPathname, asUrl);
+      } else if (ctg === "자유게시판") {
+        let goPathname = "/community/freelist/view/[id]";
+        let asUrl = `/community/freelist/view/${res.data.postId}?ctg=${ctg}&page=${page}&searchType=${searchType}&searchText=${searchText}&orderType=${orderType}`;
+        handleRouter(goPathname, asUrl);
       }
     });
   };

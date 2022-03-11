@@ -5,8 +5,14 @@ import Footer from "../contain/footer/Footer";
 import BoardList from "./BoardList";
 import PageTop from "./PageTop";
 
-export default function List({ ctg, list, pageNumbers }: any) {
-  const [isSelect, setIsSelect] = useState(false);
+export default function List({
+  list,
+  pageNumbers,
+}: {
+  list: [];
+  pageNumbers: Number[];
+}) {
+  const [isSelect, setIsSelect] = useState<boolean>(false);
   return (
     <>
       <Wrap
@@ -21,7 +27,6 @@ export default function List({ ctg, list, pageNumbers }: any) {
 
         <ListMain>
           <BoardList
-            ctg={ctg}
             isSelect={isSelect}
             setIsSelect={setIsSelect}
             list={list}

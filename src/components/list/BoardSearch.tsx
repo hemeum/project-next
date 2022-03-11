@@ -3,7 +3,12 @@ import { SetStateAction } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
-export default function BoardSearch({ isSelect, setIsSelect }: any) {
+interface propsType {
+  isSelect: boolean;
+  setIsSelect: (isSelect: boolean) => void;
+}
+
+export default function BoardSearch({ isSelect, setIsSelect }: propsType) {
   const router = useRouter();
   const ctg = router.query.ctg
     ? router.query.ctg
@@ -24,6 +29,26 @@ export default function BoardSearch({ isSelect, setIsSelect }: any) {
 
   const clickSelectedSearch = () => {
     setIsSelect(!isSelect);
+  };
+
+  const handleRouter = () => {
+    if (searchText.length < 2) {
+      window.alert("최소 두 글자 이상 입력해주세요.");
+      return;
+    } else {
+      router.push({
+        pathname: router.pathname,
+        query: {
+          ctg: ctg,
+          page: 1,
+          searchText: searchText,
+          searchType: searchType,
+          orderType:
+            orderType === "최신순" || !orderType ? "최신순" : "좋아요순",
+        },
+      });
+      setSearchText("");
+    }
   };
 
   return (
@@ -48,25 +73,7 @@ export default function BoardSearch({ isSelect, setIsSelect }: any) {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              if (searchText.length < 2) {
-                window.alert("최소 두 글자 이상 입력해주세요.");
-                return;
-              } else {
-                router.push({
-                  pathname: "/community/freelist",
-                  query: {
-                    ctg: ctg,
-                    page: 1,
-                    searchText: searchText,
-                    searchType: searchType,
-                    orderType:
-                      orderType === "최신순" || !orderType
-                        ? "최신순"
-                        : "좋아요순",
-                  },
-                });
-                setSearchText("");
-              }
+              handleRouter();
             }}
           >
             <input
@@ -81,25 +88,7 @@ export default function BoardSearch({ isSelect, setIsSelect }: any) {
               aria-hidden
               className="fas fa-search"
               onClick={() => {
-                if (searchText.length < 2) {
-                  window.alert("최소 두 글자 이상 입력해주세요.");
-                  return;
-                } else {
-                  router.push({
-                    pathname: "/community/freelist",
-                    query: {
-                      ctg: ctg,
-                      page: 1,
-                      searchText: searchText,
-                      searchType: searchType,
-                      orderType:
-                        orderType === "최신순" || !orderType
-                          ? "최신순"
-                          : "좋아요순",
-                    },
-                  });
-                  setSearchText("");
-                }
+                handleRouter();
               }}
             ></i>
           </form>
