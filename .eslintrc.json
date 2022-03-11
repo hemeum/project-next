@@ -4,13 +4,7 @@
     "es6": true,
     "node": true
   },
-  "parser": "@babel/eslint-parser",
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "airbnb",
-    "plugin:prettier/recommended"
-  ],
+  "parser": "@typescript-eslint/parser",
   "settings": {
     "react": {
       "version": "detect"
@@ -24,6 +18,13 @@
     "sourceType": "module"
   },
   "plugins": ["react", "react-hooks", "prettier"],
+  "extends": [
+    "prettier/@typescript-eslint",
+    "plugin:react/recommended",
+    "airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
   "rules": {
     "react/react-in-jsx-scope": 0,
     "react/prefer-stateless-function": 0,
