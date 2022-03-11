@@ -33,8 +33,14 @@ export default function BoardControll({ pageNumbers, page }: any) {
   const orderType = router.query.orderType;
 
   const handleRouter = (page: Number) => {
+    let pathname;
+    if (ctg === "자유게시판") {
+      pathname = "/community/freelist";
+    } else if (ctg === "공지사항") {
+      pathname = "/news/noticelist";
+    }
     router.push({
-      pathname: router.pathname,
+      pathname: pathname,
       query: {
         ctg: ctg
           ? ctg
