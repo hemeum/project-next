@@ -326,6 +326,7 @@ const Text = styled.div`
     :nth-of-type(2) {
       margin: 50px 0;
       font-size: 16px;
+      word-break: break-all;
     }
   }
   > div {
