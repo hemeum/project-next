@@ -1,1 +1,0 @@
-web:node --exec ts-node server.ts
