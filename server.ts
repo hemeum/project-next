@@ -26,11 +26,11 @@ interface mysqlOptionsType {
 }
 
 const mysqlOptions: mysqlOptionsType = {
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_DATABASE,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  host: "svc.sel5.cloudtype.app",
+  port: "31738",
+  database: "next",
+  user: "root",
+  password: "gmldms971506!",
 };
 
 const connection = mysql.createConnection(mysqlOptions);
@@ -43,7 +43,7 @@ const Jwtconfig = {
     const token = req.cookies.token;
     return token;
   },
-  secretOrKey: process.env.JWT_SECRET_KEY,
+  secretOrKey: "dkssudgktpdy",
 };
 
 const dev = true;
