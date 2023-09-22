@@ -1,7 +1,6 @@
 import express from "express";
 import next from "next";
 import mysql from "mysql";
-import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import cookieParser from "cookie-parser";
 import passport from "passport";
@@ -15,7 +14,6 @@ const LocalStrategy = passportLocal.Strategy;
 const JwtStrategy = passportJwt.Strategy;
 
 const saltRounds = 10;
-dotenv.config();
 
 interface mysqlOptionsType {
   host: any;
